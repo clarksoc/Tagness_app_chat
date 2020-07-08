@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -63,15 +64,43 @@ class _HomeScreenState extends State<HomeScreen> {
         return;
       },
     );
-    firebaseMessaging.getToken().then((token){
+    firebaseMessaging.getToken().then((token) {
       print("Token: $token");
-      fireInstance.collection("users").document(currentUserId).updateData({"pushToken": token});
-    }).catchError((onError){
+      fireInstance
+          .collection("users")
+          .document(currentUserId)
+          .updateData({"pushToken": token});
+    }).catchError((onError) {
       FlutterToast.showToast(msg: onError.message.toString());
     });
   }
 
-  void showNotification(message) async {}
+  void showNotification(message) async {
+    AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+      "com.connor.tagnessappchat",
+      "Tagness Chat App",
+      "Channel Description",
+      playSound: true,
+      enableLights: true,
+      enableVibration: true,
+      importance: Importance.Max,
+      priority: Priority.High,
+    );
+    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
+    NotificationDetails notificationDetails =
+        NotificationDetails(androidNotificationDetails, iosNotificationDetails);
+
+    print(message);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      message["title"].toString(),
+      message["body"].toString(),
+      notificationDetails,
+      payload: json.encode(message),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
