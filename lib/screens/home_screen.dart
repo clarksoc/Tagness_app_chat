@@ -102,6 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void configureLocalNotification(){
+    AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("app_icon");
+    IOSInitializationSettings iosInitializationSettings = IOSInitializationSettings();
+    InitializationSettings initializationSettings = InitializationSettings(androidInitializationSettings, iosInitializationSettings);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
