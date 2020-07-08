@@ -11,6 +11,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tagnessappchat/main.dart';
 
 import '../widgets/settings.dart';
+import '../widgets/profile.dart';
 
 class HomeScreen extends StatefulWidget {
   final String currentUserId;
@@ -123,10 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
     if (selection.title == "Log out") signOutHandler();
     if (selection.title == "Settings")
       Navigator.push(context, MaterialPageRoute(builder: (cxt) => Settings()));
-    else {
-      //TODO: Add user profile page for display/editing
-      print("Add user page");
-    }
+    if(selection.title == "Profile")
+      Navigator.push(context, MaterialPageRoute(builder: (cxt) => Profile()));
+
+    //TODO: Add user profile page for display/editing & Settings screen
+
   }
 
   Future<Null> signOutHandler() async {
@@ -152,10 +154,37 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Welcome"),
+        title: Text(
+          "Welcome",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        actions: <Widget>[
+          PopupMenuButton<Selection>(
+            onSelected: onMenuPress,
+            itemBuilder: (BuildContext context) {
+              return selections.map((Selection selection) {
+                return PopupMenuItem<Selection>(
+                  value: selection,
+                  child: Row(
+                    children: <Widget>[
+                      Icon(selection.iconData),
+                      Container(
+                        width: 10.0,
+                      ),
+                      Text(selection.title),
+                    ],
+                  ),
+                );
+              }).toList();
+            },
+          )
+        ],
       ),
-      body: Container(
-        child: Text("User Id used for QR Code: $currentUserId"),
+      body: WillPopScope(
+        child: Stack(children: <Widget>[
+          Container(child: ,),
+        ],),
       ),
     );
   }
