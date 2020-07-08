@@ -23,7 +23,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final GoogleSignIn googleSignIn = GoogleSignIn();
   bool isLoading = false;
-  List<Selection> selection
+  List<Selection> selections = const <Selection>[
+    const Selection(title: "Settings", iconData: Icons.settings),
+    const Selection(title: "Profile", iconData: Icons.person),
+    const Selection(title: "Log out", iconData: Icons.exit_to_app),
+  ];
 
   @override
   Widget build(BuildContext context) {
