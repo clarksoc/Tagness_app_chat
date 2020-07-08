@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "506351854177",
+    "firebase_url": "https://tagness-chat-app.firebaseio.com",
+    "project_id": "tagness-chat-app",
+    "storage_bucket": "tagness-chat-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506351854177:android:60a3a3f3dec3fac1544020",
+        "android_client_info": {
+          "package_name": "com.connor.tagnessappchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506351854177-d37n6qfuir9sbmuip1euptfiq0099161.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.connor.tagnessappchat",
+            "certificate_hash": "7f217ec3bd3e6190c6b7e3994da8937bd9c0caa9"
+          }
+        },
+        {
+          "client_id": "506351854177-f5fq8ms4g27vm9epjvuh7v5a0l1as7o9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTlHOwV6p2MorVvlWTBwqLWsEgGNx1-Oo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506351854177-f5fq8ms4g27vm9epjvuh7v5a0l1as7o9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
