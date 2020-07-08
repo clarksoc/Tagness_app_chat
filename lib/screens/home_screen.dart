@@ -2,11 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tagnessappchat/main.dart';
+
+import '../widgets/settings.dart';
 
 class HomeScreen extends StatefulWidget {
   final String currentUserId;
@@ -27,8 +31,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   final GoogleSignIn googleSignIn = GoogleSignIn();
+
   var fireInstance = Firestore.instance;
+  var fireAuth = FirebaseAuth.instance;
   bool isLoading = false;
+
   List<Selection> selections = const <Selection>[
     //Drop down menu options
     const Selection(title: "Settings", iconData: Icons.settings),
@@ -102,11 +109,43 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void configureLocalNotification(){
-    AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings("app_icon");
-    IOSInitializationSettings iosInitializationSettings = IOSInitializationSettings();
-    InitializationSettings initializationSettings = InitializationSettings(androidInitializationSettings, iosInitializationSettings);
+  void configureLocalNotification() {
+    AndroidInitializationSettings androidInitializationSettings =
+        AndroidInitializationSettings("app_icon");
+    IOSInitializationSettings iosInitializationSettings =
+        IOSInitializationSettings();
+    InitializationSettings initializationSettings = InitializationSettings(
+        androidInitializationSettings, iosInitializationSettings);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  void onMenuPress(Selection selection) {
+    if (selection.title == "Log out") signOutHandler();
+    if (selection.title == "Settings")
+      Navigator.push(context, MaterialPageRoute(builder: (cxt) => Settings()));
+    else {
+      //TODO: Add user profile page for display/editing
+      print("Add user page");
+    }
+  }
+
+  Future<Null> signOutHandler() async {
+    this.setState(() {
+      isLoading = true;
+    });
+
+    await fireAuth.signOut();
+    await googleSignIn
+        .disconnect(); //needed for when user logged in with google
+    await googleSignIn.signOut();
+
+    this.setState(() {
+      isLoading = false;
+    });
+
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (ctx) => MyApp()),
+        (Route<dynamic> route) => false);
   }
 
   @override
