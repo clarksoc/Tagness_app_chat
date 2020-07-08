@@ -12,6 +12,7 @@ import 'package:tagnessappchat/main.dart';
 
 import '../widgets/settings.dart';
 import '../widgets/profile.dart';
+import '../widgets/build_item.dart';
 
 class HomeScreen extends StatefulWidget {
   final String currentUserId;
@@ -183,7 +184,20 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: WillPopScope(
         child: Stack(children: <Widget>[
-          Container(child: ,),
+          Container(child: StreamBuilder(
+            stream: fireInstance.collection("users").snapshots(),
+            builder: (context, snapshot){
+              if(!snapshot.hasData){
+                return Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                  ),
+                );
+              }else{
+                return ListView.builder(itemBuilder: (context, index) => buildItem(context, snapshot.data.documents[index], currentUserId), );
+              }
+            },
+          ),),
         ],),
       ),
     );
