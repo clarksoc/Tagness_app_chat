@@ -44,7 +44,8 @@ Widget buildItem(
           Flexible(
               child: Container(
                 child: Text(
-                  "Username: ${documentSnapshot["username"]}",
+                  "${documentSnapshot["username"]}",
+                  style: TextStyle(color: Colors.black),
                 ),
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(left: 10, right: 5.0),

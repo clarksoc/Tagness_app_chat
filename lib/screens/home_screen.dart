@@ -13,6 +13,7 @@ import 'package:tagnessappchat/main.dart';
 import '../widgets/settings.dart';
 import '../widgets/profile.dart';
 import '../widgets/build_item.dart';
+import '../widgets/loading.dart';
 
 class HomeScreen extends StatefulWidget {
   final String currentUserId;
@@ -125,11 +126,10 @@ class _HomeScreenState extends State<HomeScreen> {
     if (selection.title == "Log out") signOutHandler();
     if (selection.title == "Settings")
       Navigator.push(context, MaterialPageRoute(builder: (cxt) => Settings()));
-    if(selection.title == "Profile")
+    if (selection.title == "Profile")
       Navigator.push(context, MaterialPageRoute(builder: (cxt) => Profile()));
 
     //TODO: Add user profile page for display/editing & Settings screen
-
   }
 
   Future<Null> signOutHandler() async {
@@ -183,22 +183,31 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: WillPopScope(
-        child: Stack(children: <Widget>[
-          Container(child: StreamBuilder(
-            stream: fireInstance.collection("users").snapshots(),
-            builder: (context, snapshot){
-              if(!snapshot.hasData){
-                return Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                  ),
-                );
-              }else{
-                return ListView.builder(itemBuilder: (context, index) => buildItem(context, snapshot.data.documents[index], currentUserId), );
-              }
-            },
-          ),),
-        ],),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              child: StreamBuilder(
+                stream: fireInstance.collection("users").snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemBuilder: (context, index) => buildItem(context,
+                          snapshot.data.documents[index], currentUserId),
+                      itemCount: snapshot.data.documents.length,
+                    );
+                  }
+                },
+              ),
+            ),
+            Positioned(child: isLoading? const Loading() : Container())
+          ],
+        ),
       ),
     );
   }
