@@ -32,7 +32,8 @@ dependencies:
   image_picker: ^0.6.7+4
   cached_network_image: ^2.2.0+1
   intl: ^0.16.1
-
+  firebase_messaging: ^6.0.16
+  flutter_local_notifications: ^1.4.4+2
 
 
   # The following adds the Cupertino Icons font to your application.
