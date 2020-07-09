@@ -14,6 +14,7 @@ import '../widgets/settings.dart';
 import '../widgets/profile.dart';
 import '../widgets/build_item.dart';
 import '../widgets/loading.dart';
+import '../widgets/open_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   final String currentUserId;
@@ -132,6 +133,11 @@ class _HomeScreenState extends State<HomeScreen> {
     //TODO: Add user profile page for display/editing & Settings screen
   }
 
+  Future<bool> onBackPress(){
+    OpenDialog(context);
+    return Future.value(false);
+  }
+
   Future<Null> signOutHandler() async {
     this.setState(() {
       isLoading = true;
@@ -198,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   } else {
                     return ListView.builder(
-                      itemBuilder: (context, index) => buildItem(context,
+                      itemBuilder: (context, index) => buildItem(context,//calls the build_item widget and passes in the current User
                           snapshot.data.documents[index], currentUserId),
                       itemCount: snapshot.data.documents.length,
                     );
@@ -206,13 +212,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            Positioned(child: isLoading? const Loading() : Container())
+            Positioned(child: isLoading? const Loading() : Container())//Displays loading circle if loading users in the database or an empty container if there are no more
           ],
         ),
+        onWillPop: onBackPress,
       ),
     );
   }
 }
+
+
 
 class Selection {
   final String title;
