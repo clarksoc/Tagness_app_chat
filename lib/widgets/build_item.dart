@@ -34,7 +34,7 @@ Widget buildItem(
                 : Icon(
                     Icons.account_circle,
                     size: 50.0,
-                    color: Colors.blueGrey,
+                    color: Theme.of(context).primaryColor,
                   ),
             borderRadius: BorderRadius.all(
               Radius.circular(18.0),
@@ -56,10 +56,11 @@ Widget buildItem(
         onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Chat()));
         },
-        color: Colors.grey,
+        color: Theme.of(context).primaryColor,
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
+      margin: EdgeInsets.only(left: 15, right: 15, top: 20),
     );
   }
 }
