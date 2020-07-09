@@ -12,36 +12,36 @@ Widget buildItem(
   } else {
     return Container(
       child: FlatButton(
-          child: Row(
-        children: <Widget>[
-          Material(
-            child: documentSnapshot["photoUrl"] != null
-                ? CachedNetworkImage(
-                    placeholder: (context, photoUrl) => Container(
-                      width: 50,
-                      height: 50,
-                      padding: EdgeInsets.all(15.0),
-                      child: CircularProgressIndicator(
-                        strokeWidth: 1.0,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+        child: Row(
+          children: <Widget>[
+            Material(
+              child: documentSnapshot["photoUrl"] != null
+                  ? CachedNetworkImage(
+                      placeholder: (context, photoUrl) => Container(
+                        width: 50,
+                        height: 50,
+                        padding: EdgeInsets.all(15.0),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1.0,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                        ),
                       ),
+                      imageUrl: documentSnapshot["photoUrl"],
+                      width: 50.0,
+                      height: 50.0,
+                      fit: BoxFit.cover,
+                    )
+                  : Icon(
+                      Icons.account_circle,
+                      size: 50.0,
+                      color: Theme.of(context).primaryColor,
                     ),
-                    imageUrl: documentSnapshot["photoUrl"],
-                    width: 50.0,
-                    height: 50.0,
-                    fit: BoxFit.cover,
-                  )
-                : Icon(
-                    Icons.account_circle,
-                    size: 50.0,
-                    color: Theme.of(context).primaryColor,
-                  ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(18.0),
+              borderRadius: BorderRadius.all(
+                Radius.circular(18.0),
+              ),
+              clipBehavior: Clip.hardEdge,
             ),
-            clipBehavior: Clip.hardEdge,
-          ),
-          Flexible(
+            Flexible(
               child: Container(
                 child: Text(
                   "${documentSnapshot["username"]}",
@@ -50,11 +50,20 @@ Widget buildItem(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(left: 10, right: 5.0),
               ),
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
         onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Chat()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Chat(
+                chatId: documentSnapshot.documentID,
+                chatAvatar: documentSnapshot["photoUrl"],
+                chatName: documentSnapshot["username"],
+              ),
+            ),
+          );
         },
         color: Theme.of(context).primaryColor,
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),

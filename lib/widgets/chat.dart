@@ -4,9 +4,10 @@ import '../screens/chat_screen.dart';
 
 class Chat extends StatelessWidget {
   final String chatId;
+  final String chatName;
   final String chatAvatar;
 
-  Chat({Key key, @required this.chatId, @required this.chatAvatar})
+  Chat({Key key, @required this.chatId, @required this.chatAvatar, @required this.chatName})
       : super(key: key);
 
   @override
@@ -14,9 +15,9 @@ class Chat extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "CHAT",
+          "$chatName",
           style: TextStyle(
-              color: Theme.of(context).primaryColor,
+              color: Colors.black,
               fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
