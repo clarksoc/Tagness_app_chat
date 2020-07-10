@@ -49,8 +49,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    registerNotification();
+    configureLocalNotification();
+/*    firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) {
+        print("onMessage: $message");
+
+        Platform.isAndroid
+            ? showNotification(message["notification"])
+            : showNotification(message["apps"]["alert"]);
+        return;
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        print("onMessage: $message");
+        return;
+      },
+      onResume: (Map<String, dynamic> message) {
+        print("onMessage: $message");
+        return;
+      },
+    );
+    firebaseMessaging.getToken().then((token) {
+      print("Token: $token");
+      fireInstance
+          .collection("users")
+          .document(currentUserId)
+          .updateData({"pushToken": token});
+    }).catchError((onError) {
+      FlutterToast.showToast(msg: onError.message.toString());
+    });*/
   }
 
   void registerNotification() {

@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "tagnesschat": "tagness-chat-app",
+    "default": "tagness-chat-app"
+  }
+}
