@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
           "username": firebaseUser.displayName,
           "photoUrl": firebaseUser.photoUrl,
           "id": firebaseUser.uid,
-          "createdAt": DateTime.now().millisecondsSinceEpoch.toString(),
+          "createdAt": Timestamp.now().toString(),
           "currentChat": null,
           "phoneNumber": firebaseUser.phoneNumber
         });

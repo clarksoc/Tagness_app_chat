@@ -24,8 +24,10 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final TextEditingController textEditingController = TextEditingController();
-  final ScrollController scrollController = ScrollController();
+  final textEditingController = TextEditingController();
+/*
+  var scrollController = ScrollController();
+*/
   final FocusNode focusNode = FocusNode();
   final fireStoreInstance = Firestore.instance;
 
@@ -35,6 +37,8 @@ class _ChatScreenState extends State<ChatScreen> {
   _ChatScreenState({Key key, @required this.chatId, @required this.chatAvatar});
 
   String userId;
+
+  ScrollController scrollController;
 
   var listMessage;
   String groupChatId;
@@ -55,6 +59,8 @@ class _ChatScreenState extends State<ChatScreen> {
     isLoading = false;
     showSticker = false;
     imageUrl = "";
+
+    scrollController = new ScrollController()..addListener(_scrollListener);
 
     readLocal();
   }
@@ -116,15 +122,15 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  void onSendMessage(String messageContent, int messageType) {
-    if (messageContent.trim() != "") {
+  void onSendMessage(String _enteredMessage, int messageType) {
+    if (_enteredMessage.trim() != "") {
       textEditingController.clear();
 
       var documentReference = fireStoreInstance
           .collection("messages")
           .document(groupChatId)
           .collection(groupChatId)
-          .document(DateTime.now().millisecondsSinceEpoch.toString());
+          .document(Timestamp.now().toString());
 
       fireStoreInstance.runTransaction((transaction) async {
         await transaction.set(
@@ -132,11 +138,12 @@ class _ChatScreenState extends State<ChatScreen> {
           {
             "fromId": userId,
             "toId": chatId,
-            "timestamp": DateTime.now().millisecondsSinceEpoch.toString(),
-            "content": messageContent,
+            "timestamp": Timestamp.now(),
+            "content": _enteredMessage,
             "type": messageType,
           },
         );
+        textEditingController.clear();
       });
       scrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
@@ -167,7 +174,13 @@ class _ChatScreenState extends State<ChatScreen> {
           )
         ],
       ),
+      onWillPop: onBackPress,
     );
+  }
+  Future<bool> onBackPress(){
+    Firestore.instance.collection("users").document(userId).updateData({"chattingWith": null});
+    Navigator.pop(context);
+    return Future.value(false);
   }
 
   Widget buildListMessage() {
@@ -189,7 +202,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   .document(groupChatId)
                   .collection(groupChatId)
                   .orderBy("timestamp", descending: true)
-                  .limit(20)
                   .snapshots(),
               builder: (context, messageSnapshot) {
                 //listMessage = messageSnapshot.data.documents;
@@ -217,6 +229,10 @@ class _ChatScreenState extends State<ChatScreen> {
             );
           }),
     );
+  }
+
+  void _scrollListener(){
+
   }
 
 

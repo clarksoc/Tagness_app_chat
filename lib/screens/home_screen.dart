@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tagnessappchat/main.dart';
+import 'package:tagnessappchat/screens/chat_screen.dart';
 
 import '../widgets/settings.dart';
 import '../widgets/profile.dart';
@@ -52,33 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     registerNotification();
     configureLocalNotification();
-/*    firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {
-        print("onMessage: $message");
-
-        Platform.isAndroid
-            ? showNotification(message["notification"])
-            : showNotification(message["apps"]["alert"]);
-        return;
-      },
-      onLaunch: (Map<String, dynamic> message) {
-        print("onMessage: $message");
-        return;
-      },
-      onResume: (Map<String, dynamic> message) {
-        print("onMessage: $message");
-        return;
-      },
-    );
-    firebaseMessaging.getToken().then((token) {
-      print("Token: $token");
-      fireInstance
-          .collection("users")
-          .document(currentUserId)
-          .updateData({"pushToken": token});
-    }).catchError((onError) {
-      FlutterToast.showToast(msg: onError.message.toString());
-    });*/
   }
 
   void registerNotification() {
