@@ -89,8 +89,10 @@ class _LoginScreenState extends State<LoginScreen> {
           "photoUrl": firebaseUser.photoUrl,
           "id": firebaseUser.uid,
           "createdAt": Timestamp.now().toString(),
-          "currentChat": null,
-          "phoneNumber": firebaseUser.phoneNumber
+          "phoneNumber": firebaseUser.phoneNumber,
+          "firstName": null,
+          "lastName": null,
+          "email": firebaseUser.email,
         });
         //Writing data to local device
         currentUser = firebaseUser;
@@ -105,8 +107,10 @@ class _LoginScreenState extends State<LoginScreen> {
         await preferences.setString("username", documents[0]["username"]);
         await preferences.setString("photoUrl", documents[0]["photoUrl"]);
         await preferences.setString("phoneNumber", documents[0]["phoneNumber"]);
-        await preferences.setString("address", documents[0]["address"]);
-        await preferences.setString("fullName", documents[0]["fullName"]);
+        await preferences.setString("email", documents[0]["email"]);
+        //await preferences.setString("address", documents[0]["address"]);
+        await preferences.setString("firstName", documents[0]["firstName"]);
+        await preferences.setString("lastName", documents[0]["lastName"]);
       }
       FlutterToast.showToast(msg: "Sign in Successful");
       this.setState(() {

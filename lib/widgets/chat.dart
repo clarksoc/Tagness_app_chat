@@ -20,6 +20,7 @@ class Chat extends StatelessWidget {
               color: Colors.black,
               fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Theme.of(context).accentColor,
         centerTitle: true,
       ),
       body: ChatScreen(

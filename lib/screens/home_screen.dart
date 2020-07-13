@@ -11,7 +11,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tagnessappchat/main.dart';
 import 'package:tagnessappchat/screens/chat_screen.dart';
 
-import '../widgets/settings.dart';
+import 'settings_screen.dart';
 import '../widgets/profile.dart';
 import '../widgets/build_item.dart';
 import '../widgets/loading.dart';
@@ -128,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void onMenuPress(Selection selection) {
     if (selection.title == "Log out") signOutHandler();
     if (selection.title == "Settings")
-      Navigator.push(context, MaterialPageRoute(builder: (cxt) => Settings()));
+      Navigator.push(context, MaterialPageRoute(builder: (cxt) => SettingsScreen()));
     if (selection.title == "Profile")
       Navigator.push(context, MaterialPageRoute(builder: (cxt) => Profile()));
 

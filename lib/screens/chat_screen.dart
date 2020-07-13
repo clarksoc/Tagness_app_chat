@@ -102,7 +102,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future uploadFile() async {
     String fileName = uuid.v4();
-    print(fileName);
     StorageReference storageReference =
         FirebaseStorage.instance.ref().child(fileName);
     StorageUploadTask storageUploadTask = storageReference.putFile(imageFile);
