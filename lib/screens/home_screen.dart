@@ -148,10 +148,10 @@ class _HomeScreenState extends State<HomeScreen> {
     //TODO: Add user profile page for display/editing & Settings screen
   }
 
-  Future<bool> onBackPress(){
+/*  Future<bool> onBackPress(){
     OpenDialog(context);
     return Future.value(false);
-  }
+  }*/
 
   Future<Null> signOutHandler() async {
     this.setState(() {
@@ -204,8 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: WillPopScope(
-        child: Stack(
+      body: Stack(
           children: <Widget>[
             Container(
               child: StreamBuilder(
@@ -230,8 +229,6 @@ class _HomeScreenState extends State<HomeScreen> {
             Positioned(child: isLoading? const Loading() : Container())//Displays loading circle if loading users in the database or an empty container if there are no more
           ],
         ),
-        onWillPop: onBackPress,
-      ),
     );
   }
 }

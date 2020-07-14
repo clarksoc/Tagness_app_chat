@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tagnessappchat/screens/main_screen.dart';
 
 
 import '../widgets/loading.dart';
@@ -48,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeScreen(
+          builder: (context) => MainScreen(
             currentUserId: preferences.getString("id"),
           ),
         ),
