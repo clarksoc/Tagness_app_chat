@@ -16,6 +16,7 @@ import '../widgets/profile.dart';
 import '../widgets/build_item.dart';
 import '../widgets/loading.dart';
 import '../widgets/open_dialog.dart';
+import '../widgets/chat.dart';
 
 class HomeScreen extends StatefulWidget {
   final String currentUserId;
@@ -70,10 +71,12 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       onLaunch: (Map<String, dynamic> message) {
         print("onMessage: $message");
+        selectNotification(message["data"]);
         return;
       },
       onResume: (Map<String, dynamic> message) {
         print("onMessage: $message");
+        selectNotification(message["data"]);
         return;
       },
     );
@@ -123,6 +126,16 @@ class _HomeScreenState extends State<HomeScreen> {
     InitializationSettings initializationSettings = InitializationSettings(
         androidInitializationSettings, iosInitializationSettings);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future selectNotification(String message) async {
+    if (message != null) {
+      debugPrint('notification payload: $message');
+    }
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Chat(chatId: message,)),
+    );
   }
 
   void onMenuPress(Selection selection) {

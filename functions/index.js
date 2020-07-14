@@ -39,6 +39,9 @@ exports.sendNotification = functions.firestore
                       body: contentMessage,
                       badge: '1',
                       sound: 'default'
+                    },
+                    data: {
+                      id: String(userFrom.data().id),
                     }
                   }
                   // Let push to the target device

@@ -29,6 +29,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   FirebaseUser currentUser;
 
+  @override
+  void initState() {
+    super.initState();
+    isSignedIn();
+  }
+
   void isSignedIn() async {
     this.setState(() {
       isLoading = true;
@@ -36,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     preferences = await SharedPreferences.getInstance();
     isLogIn = await googleSignIn.isSignedIn();
+    print(isLogIn.toString());
 
     if (isLogIn) {
       Navigator.push(

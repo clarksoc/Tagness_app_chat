@@ -14,8 +14,9 @@ import '../widgets/build_item_chat.dart';
 class ChatScreen extends StatefulWidget {
   final String chatId;
   final String chatAvatar;
+  final String payload;
 
-  ChatScreen({Key key, @required this.chatId, @required this.chatAvatar})
+  ChatScreen({Key key, @required this.chatId, @required this.chatAvatar, this.payload})
       : super(key: key);
 
   @override
@@ -255,6 +256,9 @@ class _ChatScreenState extends State<ChatScreen> {
           Flexible(
             child: Container(
               child: TextField(
+                textInputAction: TextInputAction.newline,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
                 style: TextStyle(
                     color: Theme.of(context).primaryColor, fontSize: 15.0),
                 controller: textEditingController,
