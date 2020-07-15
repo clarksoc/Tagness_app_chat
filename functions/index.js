@@ -42,6 +42,9 @@ exports.sendNotification = functions.firestore
                     },
                     data: {
                       id: String(userFrom.data().id),
+                      click_action: "FLUTTER_NOTIFICATION_CLICK",
+                      name: String(userFrom.data().username),
+                      photo_url: String(userFrom.data().photoUrl),
                     }
                   }
                   // Let push to the target device

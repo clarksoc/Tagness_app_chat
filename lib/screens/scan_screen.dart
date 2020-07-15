@@ -20,7 +20,12 @@ class _ScanScreenState extends State<ScanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("QR Code Scanner"),
+        title: Text(
+          "QR Code Scanner",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Theme.of(context).accentColor,
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
@@ -57,26 +62,27 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future startScan() async {
-    try{
+    try {
       var qrCode = await BarcodeScanner.scan();
       setState(() {
         this.qrCode = qrCode.rawContent;
       });
-    } on PlatformException catch (e){
-      if (e.code == BarcodeScanner.cameraAccessDenied){
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
         setState(() {
           this.qrCode = "The user did not grant camera permission!";
         });
-      }else{
+      } else {
         setState(() {
           this.qrCode = "Unknown error: $e";
         });
       }
-    } on FormatException{
+    } on FormatException {
       setState(() {
-        this.qrCode = "Null (User returned using the \"Back\"-button before scanning could complete.) Result";
+        this.qrCode =
+            "Null (User returned using the \"Back\"-button before scanning could complete.) Result";
       });
-    } catch (e){
+    } catch (e) {
       setState(() {
         this.qrCode = "Unknown Error: $e";
       });

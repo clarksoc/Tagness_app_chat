@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tagnessappchat/main.dart';
 import 'package:tagnessappchat/screens/chat_screen.dart';
+import 'package:tagnessappchat/widgets/pop_up_menu.dart';
 
 import 'settings_screen.dart';
 import '../widgets/profile.dart';
@@ -49,109 +50,15 @@ class _HomeScreenState extends State<HomeScreen> {
     const Selection(title: "Log out", iconData: Icons.exit_to_app),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    registerNotification();
-    configureLocalNotification();
-  }
-
-  void registerNotification() {
-    firebaseMessaging
-        .requestNotificationPermissions(); //Only needed for IOS devices
-
-    firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {
-        print("onMessage: $message");
-
-        Platform.isAndroid
-            ? showNotification(message["notification"])
-            : showNotification(message["apps"]["alert"]);
-        return;
-      },
-      onLaunch: (Map<String, dynamic> message) {
-        print("onMessage: $message");
-        selectNotification(message["data"]);
-        return;
-      },
-      onResume: (Map<String, dynamic> message) {
-        print("onMessage: $message");
-        selectNotification(message["data"]);
-        return;
-      },
-    );
-    firebaseMessaging.getToken().then((token) {
-      print("Token: $token");
-      fireInstance
-          .collection("users")
-          .document(currentUserId)
-          .updateData({"pushToken": token});
-    }).catchError((onError) {
-      FlutterToast.showToast(msg: onError.message.toString());
-    });
-  }
-
-  void showNotification(message) async {
-    AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-      "com.connor.tagnessappchat",
-      "Tagness Chat App",
-      "Channel Description",
-      playSound: true,
-      enableLights: true,
-      enableVibration: true,
-      importance: Importance.Max,
-      priority: Priority.High,
-    );
-    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
-    NotificationDetails notificationDetails =
-        NotificationDetails(androidNotificationDetails, iosNotificationDetails);
-
-    print(message);
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      message["title"].toString(),
-      message["body"].toString(),
-      notificationDetails,
-      payload: json.encode(message),
-    );
-  }
-
-  void configureLocalNotification() {
-    AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings("app_icon");
-    IOSInitializationSettings iosInitializationSettings =
-        IOSInitializationSettings();
-    InitializationSettings initializationSettings = InitializationSettings(
-        androidInitializationSettings, iosInitializationSettings);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  }
-
-  Future selectNotification(String message) async {
-    if (message != null) {
-      debugPrint('notification payload: $message');
-    }
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Chat(chatId: message,)),
-    );
-  }
-
   void onMenuPress(Selection selection) {
     if (selection.title == "Log out") signOutHandler();
     if (selection.title == "Settings")
-      Navigator.push(context, MaterialPageRoute(builder: (cxt) => SettingsScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (cxt) => SettingsScreen("SETTINGS")));
     if (selection.title == "Profile")
-      Navigator.push(context, MaterialPageRoute(builder: (cxt) => Profile()));
+      Navigator.push(context, MaterialPageRoute(builder: (cxt) => SettingsScreen("PROFILE")));
 
     //TODO: Add user profile page for display/editing & Settings screen
   }
-
-/*  Future<bool> onBackPress(){
-    OpenDialog(context);
-    return Future.value(false);
-  }*/
 
   Future<Null> signOutHandler() async {
     this.setState(() {
@@ -171,6 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
         MaterialPageRoute(builder: (ctx) => MyApp()),
         (Route<dynamic> route) => false);
   }
+
+  int counter = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -217,10 +126,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   } else {
-                    return ListView.builder(
-                      itemBuilder: (context, index) => buildItem(context,//calls the build_item widget and passes in the current User
-                          snapshot.data.documents[index], currentUserId),
-                      itemCount: snapshot.data.documents.length,
+                    return FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          counter = 0;
+                        });
+                      },
+                      child: ListView.builder(
+                        itemBuilder: (context, index) => buildItem(context,//calls the build_item widget and passes in the current User
+                            snapshot.data.documents[index], currentUserId),
+                        itemCount: snapshot.data.documents.length,
+                      ),
                     );
                   }
                 },

@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
             .collection("users")
             .document(firebaseUser.uid)
             .setData({
-          "username": firebaseUser.displayName,
+          "username": firebaseUser.displayName.replaceAll(" ", ""),
           "photoUrl": firebaseUser.photoUrl,
           "id": firebaseUser.uid,
           "createdAt": Timestamp.now().toString(),
@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeScreen(
+          builder: (context) => MainScreen(
             currentUserId: firebaseUser.uid,
           ),
         ),

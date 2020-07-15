@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'chat.dart';
 
+int counter = 0;
+
 Widget buildItem(
     BuildContext context, DocumentSnapshot documentSnapshot, currentUserId) {
   if (documentSnapshot["id"] == currentUserId) {

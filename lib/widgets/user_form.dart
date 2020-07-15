@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,7 +34,6 @@ class _UserFormState extends State<UserForm> {
   String _userPhoneNumber;
   String _userFirstName;
   String _userLastName;
-  String _userId;
 
   TextEditingController usernameController;
   TextEditingController emailController;
@@ -52,7 +53,6 @@ class _UserFormState extends State<UserForm> {
   void readLocal() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    _userId = sharedPreferences.getString("id") ?? "";
     _userUsername = sharedPreferences.getString("username") ?? "";
     _userEmail = sharedPreferences.getString("email") ?? "";
     _userPhoneNumber = sharedPreferences.getString("phoneNumber") ?? "";
@@ -66,7 +66,6 @@ class _UserFormState extends State<UserForm> {
     lastNameController = TextEditingController(text: _userLastName);
 
     setState(() {});
-    //print(username);
 
   }
 
@@ -125,7 +124,7 @@ class _UserFormState extends State<UserForm> {
                       ),
                       controller: usernameController,
                       onSaved: (value) {
-                        _userUsername = value;
+                        _userUsername = value.replaceAll(" ", "");
                       },
                     ),
                   ),

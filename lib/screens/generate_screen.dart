@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -15,7 +16,8 @@ class GenerateScreen extends StatefulWidget {
   GenerateScreen({Key key, @required this.currentUserId}) : super(key: key);
 
   @override
-  _GenerateScreenState createState() => _GenerateScreenState(currentUserId: currentUserId);
+  _GenerateScreenState createState() =>
+      _GenerateScreenState(currentUserId: currentUserId);
 }
 
 class _GenerateScreenState extends State<GenerateScreen> {
@@ -26,20 +28,39 @@ class _GenerateScreenState extends State<GenerateScreen> {
   static const double _topSectionTopPadding = 50.0;
   static const double _topSectionBottomPadding = 20.0;
   static const double _topSectionHeight = 50.0;
+  SharedPreferences sharedPreferences;
+
 
   var uuid = Uuid();
 
   GlobalKey globalKey = new GlobalKey();
   String _dataString = "Hello from this QR";
+  String username;
   String _inputErrorText;
   bool showQr = false;
   final TextEditingController _textEditingController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    readLocal();
+  }
+  void readLocal() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    username = sharedPreferences.getString("username") ?? "";
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("QR Code Generator"),
+        title: Text(
+          "QR Code Generator",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Theme.of(context).accentColor,
+        centerTitle: true,
       ),
       body: _contentWidget(),
     );
@@ -84,17 +105,24 @@ class _GenerateScreenState extends State<GenerateScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Expanded(
-                    child: Center(child: Text("Generate your unique ID!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),))
-                  ),
+                      child: Center(
+                          child: Text(
+                    "Generate your unique ID!",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ))),
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
                     child: FlatButton(
                       color: Colors.blueGrey,
                       textColor: Colors.white,
-                      child: Text("SUBMIT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                      child: Text(
+                        "SUBMIT",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
                       onPressed: () {
                         setState(() {
-                          _dataString = currentUserId;
+                          _dataString = "tgns.to/${username.replaceAll(" ", "")}/$currentUserId";
                           showQr = true;
                           _inputErrorText = null;
                         });
@@ -106,15 +134,17 @@ class _GenerateScreenState extends State<GenerateScreen> {
             ),
           ),
           Expanded(
-            child: showQr == false ? Center() :  Center(
-              child: RepaintBoundary(
-                key: globalKey,
-                child: QrImage(
-                  data: _dataString,
-                  size: 0.5 * bodyHeight,
-                ),
-              ),
-            ),
+            child: showQr == false
+                ? Center()
+                : Center(
+                    child: RepaintBoundary(
+                      key: globalKey,
+                      child: QrImage(
+                        data: _dataString,
+                        size: 0.5 * bodyHeight,
+                      ),
+                    ),
+                  ),
           )
         ],
       ),

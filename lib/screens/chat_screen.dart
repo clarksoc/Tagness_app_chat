@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tagnessappchat/screens/home_screen.dart';
 import 'package:uuid/uuid.dart';
 
 import '../widgets/build_item_chat.dart';
+import 'main_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
@@ -29,6 +31,8 @@ class _ChatScreenState extends State<ChatScreen> {
 /*
   var scrollController = ScrollController();
 */
+  SharedPreferences preferences;
+
   final FocusNode focusNode = FocusNode();
   final fireStoreInstance = Firestore.instance;
 
@@ -179,7 +183,15 @@ class _ChatScreenState extends State<ChatScreen> {
   }
   Future<bool> onBackPress(){
     Firestore.instance.collection("users").document(userId).updateData({"chattingWith": null});
-    Navigator.pop(context);
+    Navigator.of(context).pop();
+/*    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(
+          currentUserId: userId,
+        ),
+      ),
+    );*/
     return Future.value(false);
   }
 

@@ -7,15 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tagnessappchat/widgets/profile.dart';
 import 'package:tagnessappchat/widgets/user_form.dart';
 import 'package:uuid/uuid.dart';
 
 class SettingsScreen extends StatefulWidget {
+  final String title;
+  SettingsScreen(this.title);
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+
   final usernameFocusNode = FocusNode();
   final emailFocusNode = FocusNode();
   final phoneNumberFocusNode = FocusNode();
@@ -43,6 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   var uuid = Uuid();
 
+
   @override
   void initState() {
     super.initState();
@@ -60,14 +65,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     lastName = sharedPreferences.getString("lastName") ?? "";
     photoUrl = sharedPreferences.getString("photoUrl") ?? "";
 
-    usernameController = TextEditingController(text: username);
-    emailController = TextEditingController(text: email);
-    phoneNumberController = TextEditingController(text: phoneNumber);
-    firstNameController = TextEditingController(text: firstName);
-    lastNameController = TextEditingController(text: lastName);
 
     setState(() {});
-    print(username);
 
   }
 
@@ -144,11 +143,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     String firstName,
     String lastName,
   ) {
-    usernameFocusNode.unfocus();
-    emailFocusNode.unfocus();
-    phoneNumberFocusNode.unfocus();
-    firstNameFocusNode.unfocus();
-    lastNameFocusNode.unfocus();
+
 
     setState(() {
       isLoading = true;
@@ -185,7 +180,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "SETTINGS",
+          widget.title,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).accentColor,
@@ -240,7 +235,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                               clipBehavior: Clip.hardEdge,
                             ),
-                      IconButton(
+                      widget.title == "SETTINGS" ? IconButton(
                         icon: Icon(
                           Icons.camera_enhance,
                           color:
@@ -251,123 +246,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.grey[300],
                         iconSize: 30.0,
-                      ),
+                      ) : Container(),
                     ],
                   ),
                   width: double.infinity,
                   margin: EdgeInsets.all(20.0),
                 ),
-                UserForm(
+                widget.title == "SETTINGS" ? UserForm(
                   updateData,
                   isLoading,
-                )
-                /*Form(
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          "Username",
-                          style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                        margin:
-                            EdgeInsets.only(left: 10.0, bottom: 5.0, top: 10.0),
-                      ),
-                      Container(
-                        child: Theme(
-                          data: Theme.of(context).copyWith(
-                              primaryColor: Theme.of(context).primaryColor),
-                          child: TextField(
-                            decoration: InputDecoration(
-                                hintText: "Update your username!",
-                                contentPadding: EdgeInsets.all(5.0),
-                                hintStyle: TextStyle(
-                                  color: Colors.grey[300],
-                                ),
-                            ),
-                            controller: usernameController,
-                          ),
-                        ),
-                        margin: EdgeInsets.symmetric(vertical: 30.0),
-                      ),
-                      Container(
-                        child: Text(
-                          "Email Address",
-                          style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                        margin:
-                        EdgeInsets.only(left: 10.0, bottom: 5.0, top: 10.0),
-                      ),
-                      Container(
-                        child: Theme(
-                          data: Theme.of(context).copyWith(
-                              primaryColor: Theme.of(context).primaryColor),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: "Update your email!",
-                              contentPadding: EdgeInsets.all(5.0),
-                              hintStyle: TextStyle(
-                                color: Colors.grey[300],
-                              ),
-                            ),
-                            controller: emailController,
-                            key: ValueKey("email"),
-                            validator: (value) {
-                              if (value.isEmpty || !value.contains("@")) {
-                                return "Please Enter a Valid Email Address";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        margin: EdgeInsets.symmetric(vertical: 30.0),
-                      ),
-                      Container(
-                        child: Text(
-                          "Phone Number",
-                          style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                        margin:
-                        EdgeInsets.only(left: 10.0, bottom: 5.0, top: 10.0),
-                      ),
-                      Container(
-                        child: Theme(
-                          data: Theme.of(context).copyWith(
-                              primaryColor: Theme.of(context).primaryColor),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: "Update your phone number!",
-                              contentPadding: EdgeInsets.all(5.0),
-                              hintStyle: TextStyle(
-                                color: Colors.grey[300],
-                              ),
-                            ),
-                            controller: emailController,
-                            key: ValueKey("phone"),
-                            validator: (value) {
-                              if (value.isEmpty || !value.contains("@")) {
-                                return "Please Enter a Valid Email Address";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        margin: EdgeInsets.symmetric(vertical: 30.0),
-                      ),
-
-                    ],
-                  ),
-                )
-
-                 */
+                ) : ProfileScreen()
               ],
             ),
           )
