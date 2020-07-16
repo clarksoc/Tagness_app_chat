@@ -108,30 +108,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
             setState(() {
               isLoading = false;
             });
-            FlutterToast.showToast(msg: "Upload Successful!");
+            Fluttertoast.showToast(msg: "Upload Successful!");
           }).catchError((error) {
             setState(() {
               isLoading = false;
             });
-            FlutterToast.showToast(msg: error.toString());
+            Fluttertoast.showToast(msg: error.toString());
           });
         }, onError: (error) {
           setState(() {
             isLoading = false;
           });
-          FlutterToast.showToast(msg: "This file is not an image!");
+          Fluttertoast.showToast(msg: "This file is not an image!");
         });
       } else {
         setState(() {
           isLoading = false;
         });
-        FlutterToast.showToast(msg: "This file is not an image!");
+        Fluttertoast.showToast(msg: "This file is not an image!");
       }
     }, onError: (error) {
       setState(() {
         isLoading = false;
       });
-      FlutterToast.showToast(msg: error.toString());
+      Fluttertoast.showToast(msg: error.toString());
     });
   }
 
@@ -166,12 +166,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       setState(() {
         isLoading = false;
       });
-      FlutterToast.showToast(msg: "Update Successful!");
+      Fluttertoast.showToast(msg: "Update Successful!");
     }).catchError((error) {
       setState(() {
         isLoading = false;
       });
-      FlutterToast.showToast(msg: error.toString());
+      Fluttertoast.showToast(msg: error.toString());
     });
   }
 

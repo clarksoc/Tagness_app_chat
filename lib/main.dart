@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tagnessappchat/screens/splash_screen.dart';
 
 import 'screens/login_screen.dart';
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginScreen(title: "Tagness"),
+      home: LaunchScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

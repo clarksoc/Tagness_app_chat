@@ -7,13 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tagnessappchat/screens/home_screen.dart';
+import 'package:tagnessappchat/models/app_badge.dart';
+import 'package:tagnessappchat/screens/chat_overview_screen.dart';
 import 'package:uuid/uuid.dart';
 
 import '../widgets/build_item_chat.dart';
 import 'main_screen.dart';
 
 class ChatScreen extends StatefulWidget {
+  //TODO: Dismiss notification if on this page
   final String chatId;
   final String chatAvatar;
   final String payload;
@@ -68,6 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
     scrollController = new ScrollController()..addListener(_scrollListener);
 
     readLocal();
+    removeBadge();
   }
 
   readLocal() async {
@@ -122,7 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         isLoading = false;
       });
-      FlutterToast.showToast(msg: "File is not an image");
+      Fluttertoast.showToast(msg: "File is not an image");
     });
   }
 
@@ -152,7 +155,7 @@ class _ChatScreenState extends State<ChatScreen> {
       scrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
-      FlutterToast.showToast(msg: "Message is empty");
+      Fluttertoast.showToast(msg: "Message is empty");
     }
   }
 

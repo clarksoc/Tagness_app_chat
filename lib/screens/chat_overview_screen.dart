@@ -10,7 +10,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tagnessappchat/main.dart';
 import 'package:tagnessappchat/screens/chat_screen.dart';
-import 'package:tagnessappchat/widgets/pop_up_menu.dart';
+import 'package:tagnessappchat/models/pop_up_menu.dart';
+import 'package:tagnessappchat/screens/login_screen.dart';
 
 import 'settings_screen.dart';
 import '../widgets/profile.dart';
@@ -19,20 +20,20 @@ import '../widgets/loading.dart';
 import '../widgets/open_dialog.dart';
 import '../widgets/chat.dart';
 
-class HomeScreen extends StatefulWidget {
+class ChatOverviewScreen extends StatefulWidget {
   final String currentUserId;
 
-  HomeScreen({Key key, @required this.currentUserId}) : super(key: key);
+  ChatOverviewScreen({Key key, @required this.currentUserId}) : super(key: key);
 
   @override
-  _HomeScreenState createState() =>
-      _HomeScreenState(currentUserId: currentUserId);
+  _ChatOverviewScreenState createState() =>
+      _ChatOverviewScreenState(currentUserId: currentUserId);
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
   String currentUserId;
 
-  _HomeScreenState({Key key, @required this.currentUserId});
+  _ChatOverviewScreenState({Key key, @required this.currentUserId});
 
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -56,8 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
       Navigator.push(context, MaterialPageRoute(builder: (cxt) => SettingsScreen("SETTINGS")));
     if (selection.title == "Profile")
       Navigator.push(context, MaterialPageRoute(builder: (cxt) => SettingsScreen("PROFILE")));
-
-    //TODO: Add user profile page for display/editing & Settings screen
   }
 
   Future<Null> signOutHandler() async {
@@ -75,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => MyApp()),
+        MaterialPageRoute(builder: (ctx) => LoginScreen(title: "Tagness",)),
         (Route<dynamic> route) => false);
   }
 
@@ -126,18 +125,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   } else {
-                    return FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          counter = 0;
-                        });
-                      },
-                      child: ListView.builder(
+                    return ListView.builder(
                         itemBuilder: (context, index) => buildItem(context,//calls the build_item widget and passes in the current User
                             snapshot.data.documents[index], currentUserId),
                         itemCount: snapshot.data.documents.length,
-                      ),
-                    );
+                      );
                   }
                 },
               ),

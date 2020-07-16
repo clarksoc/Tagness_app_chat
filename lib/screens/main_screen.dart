@@ -18,7 +18,8 @@ import 'package:flutter_app_badger/flutter_app_badger.dart';
 import '../main.dart';
 import '../widgets/chat.dart';
 import '../widgets/open_dialog.dart';
-import 'home_screen.dart';
+import 'chat_overview_screen.dart';
+import 'login_screen.dart';
 import 'scan_screen.dart';
 
 import 'generate_screen.dart';
@@ -129,7 +130,7 @@ class _MainScreenState extends State<MainScreen> {
           .document(widget.currentUserId)
           .updateData({"pushToken": token});
     }).catchError((onError) {
-      FlutterToast.showToast(msg: onError.message.toString());
+      Fluttertoast.showToast(msg: onError.message.toString());
     });
   }
 
@@ -188,8 +189,6 @@ class _MainScreenState extends State<MainScreen> {
       Navigator.push(context, MaterialPageRoute(builder: (cxt) => SettingsScreen("PROFILE")));
 
     return;
-
-    //TODO: Add user profile page for display/editing & Settings screen
   }
 
   Future<Null> signOutHandler() async {
@@ -207,7 +206,7 @@ class _MainScreenState extends State<MainScreen> {
     });
 
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => MyApp()),
+        MaterialPageRoute(builder: (ctx) => LoginScreen(title: "Tagness",)),
             (Route<dynamic> route) => false);
   }
 
@@ -306,7 +305,7 @@ class _MainScreenState extends State<MainScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomeScreen(currentUserId: widget.currentUserId,),
+                        builder: (context) => ChatOverviewScreen(currentUserId: widget.currentUserId,),
                       ),
                     );
                   },

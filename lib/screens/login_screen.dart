@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tagnessappchat/screens/main_screen.dart';
 
 
+import 'main_screen.dart';
 import '../widgets/loading.dart';
-
-import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final String title;
@@ -29,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLogIn = false;
 
   FirebaseUser currentUser;
-
+/*
   @override
   void initState() {
     super.initState();
@@ -59,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
     this.setState(() {
       isLoading = false;
     });
-  }
+  }*/
 
   Future<Null> googleSignInHandler() async {
     preferences = await SharedPreferences.getInstance();
@@ -86,7 +84,6 @@ class _LoginScreenState extends State<LoginScreen> {
           .where("id", isEqualTo: firebaseUser.uid)
           .getDocuments();
       final List<DocumentSnapshot> documents = result.documents;
-      //TODO: IF PHONE NUMBER IS NULL ASK FOR PHONE NUMBER
       if (documents.length == 0) {
         //New User, creates new data
         Firestore.instance
@@ -116,11 +113,10 @@ class _LoginScreenState extends State<LoginScreen> {
         await preferences.setString("photoUrl", documents[0]["photoUrl"]);
         await preferences.setString("phoneNumber", documents[0]["phoneNumber"]);
         await preferences.setString("email", documents[0]["email"]);
-        //await preferences.setString("address", documents[0]["address"]);
         await preferences.setString("firstName", documents[0]["firstName"]);
         await preferences.setString("lastName", documents[0]["lastName"]);
       }
-      FlutterToast.showToast(msg: "Sign in Successful");
+      Fluttertoast.showToast(msg: "Sign in Successful");
       this.setState(() {
         isLoading = false;
       });
