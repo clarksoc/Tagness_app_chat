@@ -113,11 +113,11 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         print("onMessage: $message");
 
         //if (_notification == null) {
-          Platform.isAndroid
-              ? showNotification(message)
-              : showNotification(message["apps"]["alert"]);
-          print("Supported? $_appBadgeSupported");
-          _addBadge();
+        Platform.isAndroid
+            ? showNotification(message)
+            : showNotification(message["apps"]["alert"]);
+        print("Supported? $_appBadgeSupported");
+        _addBadge();
 
         //}
         return;
@@ -133,8 +133,10 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         return;
       },
     );
-    firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
-    firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+    firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
     });
     firebaseMessaging.getToken().then((token) {
@@ -161,7 +163,9 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-      "${message["notification"]["title"]}",
+      Platform.isAndroid
+          ? "${message["notification"]["title"]}"
+          : "com.connor.tagnessappchat",
       "Tagness Chat App",
       "Channel Description",
       playSound: true,
@@ -176,33 +180,41 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         NotificationDetails(androidNotificationDetails, iosNotificationDetails);
 
     print(message);
-    var firstNotificationPlatformSpecifics =
-    NotificationDetails(androidNotificationDetails, null);
+    if (Platform.isAndroid) {
+      var firstNotificationPlatformSpecifics =
+          NotificationDetails(androidNotificationDetails, null);
 
-    await flutterLocalNotificationsPlugin.show(
-      counter,
-      //message["title"].toString(),
-      message["data"]["name"].toString(),
-      message["notification"]["body"].toString(),
-      firstNotificationPlatformSpecifics,
-      payload: json.encode(message),
-    );
-    counter++;
+      await flutterLocalNotificationsPlugin.show(
+        counter,
+        //message["title"].toString(),
+        message["data"]["name"].toString(),
+        message["notification"]["body"].toString(),
+        firstNotificationPlatformSpecifics,
+        payload: json.encode(message),
+      );
+      counter++;
 
-    var lines = List<String>();
-    lines.add("${message["notification"]["body"]}");
-    var inboxStyleInformation = InboxStyleInformation(lines,
-        contentTitle: '$counter messages', summaryText: '${message["notification"]["title"]}');
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        "${message["notification"]["title"]}", "Tagness Chat App", "Channel Description",
-        styleInformation: inboxStyleInformation,
-        groupKey: groupKey,
-        setAsGroupSummary: true);
-    var platformChannelSpecifics =
-    NotificationDetails(androidPlatformChannelSpecifics, null);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'Attention', '$counter messages', platformChannelSpecifics);
-
+      var lines = List<String>();
+      lines.add("${message["notification"]["body"]}");
+      var inboxStyleInformation = InboxStyleInformation(lines,
+          contentTitle: '$counter messages',
+          summaryText: '${message["notification"]["title"]}');
+      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+          "${message["notification"]["title"]}",
+          "Tagness Chat App",
+          "Channel Description",
+          styleInformation: inboxStyleInformation,
+          groupKey: groupKey,
+          setAsGroupSummary: true);
+      var platformChannelSpecifics =
+          NotificationDetails(androidPlatformChannelSpecifics, null);
+      await flutterLocalNotificationsPlugin.show(
+          0, 'Attention', '$counter messages', platformChannelSpecifics);
+    } else {
+      await flutterLocalNotificationsPlugin.show(0, message['title'].toString(),
+          message['body'].toString(), notificationDetails,
+          payload: json.encode(message));
+    }
   }
 
   void configureLocalNotification() {
