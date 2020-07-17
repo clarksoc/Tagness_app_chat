@@ -126,6 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
         isLoading = false;
       });
       Fluttertoast.showToast(msg: "File is not an image");
+
     });
   }
 

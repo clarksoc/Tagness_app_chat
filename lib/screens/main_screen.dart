@@ -103,9 +103,13 @@ class _MainScreenState extends State<MainScreen> {
       onLaunch: (Map<String, dynamic> message) {
         print("onMessage: $message");
 
+        Platform.isAndroid ?
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Chat(chatId: message["data"]["id"], chatName: message["data"]["name"], chatAvatar: message["data"]["photo_url"],)),
+        ) : Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Chat(chatId: message["id"], chatName: message["name"], chatAvatar: message["photo_url"],)),
         );
         _removeBadge();
         print("Supported? $_appBadgeSupported");
@@ -114,9 +118,13 @@ class _MainScreenState extends State<MainScreen> {
       onResume: (Map<String, dynamic> message) {
         print("onMessage: $message");
 
+        Platform.isAndroid ?
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Chat(chatId: message["data"]["id"], chatName: message["data"]["name"], chatAvatar: message["data"]["photo_url"],)),
+        ) : Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Chat(chatId: message["id"], chatName: message["name"], chatAvatar: message["photo_url"],)),
         );
         _removeBadge();
         print("$_appBadgeSupported");
