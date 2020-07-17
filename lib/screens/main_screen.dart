@@ -13,8 +13,6 @@ import 'package:tagnessappchat/screens/settings_screen.dart';
 import 'package:tagnessappchat/widgets/profile.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 
-
-
 import '../main.dart';
 import '../widgets/chat.dart';
 import '../widgets/open_dialog.dart';
@@ -33,7 +31,8 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
+  AppLifecycleState _notification;
 
   var fireInstance = Firestore.instance;
   var fireAuth = FirebaseAuth.instance;
@@ -51,86 +50,93 @@ class _MainScreenState extends State<MainScreen> {
 
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   String _appBadgeSupported = "Unknown";
-  String groupKey = "groupKey";
+  int counter = 1;
+  int groupCounter = 1;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initPlatformState();
     registerNotification();
     configureLocalNotification();
+    dismissNotification();
   }
 
-  initPlatformState() async{
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      _notification = state;
+      print("State: $_notification");
+      counter = 1;
+    });
+  }
+
+  initPlatformState() async {
     String appBadgeSupported;
-    try{
+    try {
       bool res = await FlutterAppBadger.isAppBadgeSupported();
-      if(res){
+      if (res) {
         appBadgeSupported = "Supported";
-      }else{
+      } else {
         appBadgeSupported = "Not Supported";
       }
-    }on PlatformException {
+    } on PlatformException {
       appBadgeSupported = "Failed to get badge support";
     }
 
-    if(!mounted) return;
+    if (!mounted) return;
 
     setState(() {
       _appBadgeSupported = appBadgeSupported;
     });
-}
-
+  }
 
   void registerNotification() {
     firebaseMessaging
         .requestNotificationPermissions(); //Only needed for IOS devices
+/*    if(_notification == null){
+      return;
+    }*/
 
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) {
         print("onMessage: $message");
 
-        Platform.isAndroid
-            ? showNotification(message["notification"])
-            : showNotification(message["apps"]["alert"]);
-        print("Supported? $_appBadgeSupported");
-        _addBadge();
+        //if (_notification == null) {
+          Platform.isAndroid
+              ? showNotification(message)
+              : showNotification(message["apps"]["alert"]);
+          print("Supported? $_appBadgeSupported");
+          _addBadge();
+
+        //}
         return;
       },
       onLaunch: (Map<String, dynamic> message) {
         print("onMessage: $message");
-
-        Platform.isAndroid ?
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Chat(chatId: message["data"]["id"], chatName: message["data"]["name"], chatAvatar: message["data"]["photo_url"],)),
-        ) : Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Chat(chatId: message["id"], chatName: message["name"], chatAvatar: message["photo_url"],)),
-        );
-        _removeBadge();
-        print("Supported? $_appBadgeSupported");
+        clickNotification(message);
         return;
       },
       onResume: (Map<String, dynamic> message) {
         print("onMessage: $message");
-
-        Platform.isAndroid ?
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Chat(chatId: message["data"]["id"], chatName: message["data"]["name"], chatAvatar: message["data"]["photo_url"],)),
-        ) : Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Chat(chatId: message["id"], chatName: message["name"], chatAvatar: message["photo_url"],)),
-        );
-        _removeBadge();
-        print("$_appBadgeSupported");
+        clickNotification(message);
         return;
       },
     );
+    firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
+    firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
     firebaseMessaging.getToken().then((token) {
       print("Token: $token");
       fireInstance
@@ -142,10 +148,20 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  void dismissNotification() async {
+    print("is this called 1?");
+    if (_notification != null) {
+      await flutterLocalNotificationsPlugin.cancelAll();
+      print("is this called?");
+    }
+  }
+
   void showNotification(message) async {
+    String groupKey = "${message["data"]["id"]}";
+
     AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails(
-      "com.connor.tagnessappchat",
+        AndroidNotificationDetails(
+      "${message["notification"]["title"]}",
       "Tagness Chat App",
       "Channel Description",
       playSound: true,
@@ -157,44 +173,81 @@ class _MainScreenState extends State<MainScreen> {
     );
     IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
     NotificationDetails notificationDetails =
-    NotificationDetails(androidNotificationDetails, iosNotificationDetails);
+        NotificationDetails(androidNotificationDetails, iosNotificationDetails);
 
     print(message);
+    var firstNotificationPlatformSpecifics =
+    NotificationDetails(androidNotificationDetails, null);
 
     await flutterLocalNotificationsPlugin.show(
-      0,
-      message["title"].toString(),
-      message["body"].toString(),
-      notificationDetails,
+      counter,
+      //message["title"].toString(),
+      message["data"]["name"].toString(),
+      message["notification"]["body"].toString(),
+      firstNotificationPlatformSpecifics,
       payload: json.encode(message),
     );
+    counter++;
+
+    var lines = List<String>();
+    lines.add("${message["notification"]["body"]}");
+    var inboxStyleInformation = InboxStyleInformation(lines,
+        contentTitle: '$counter messages', summaryText: '${message["notification"]["title"]}');
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        "${message["notification"]["title"]}", "Tagness Chat App", "Channel Description",
+        styleInformation: inboxStyleInformation,
+        groupKey: groupKey,
+        setAsGroupSummary: true);
+    var platformChannelSpecifics =
+    NotificationDetails(androidPlatformChannelSpecifics, null);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Attention', '$counter messages', platformChannelSpecifics);
 
   }
+
   void configureLocalNotification() {
     AndroidInitializationSettings androidInitializationSettings =
-    AndroidInitializationSettings("app_icon");
+        AndroidInitializationSettings("app_icon");
     IOSInitializationSettings iosInitializationSettings =
-    IOSInitializationSettings();
+        IOSInitializationSettings();
     InitializationSettings initializationSettings = InitializationSettings(
         androidInitializationSettings, iosInitializationSettings);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
-  Future selectNotification(String message) async {
-    if (message != null) {
-      debugPrint('notification payload: $message');
-    }
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Chat(chatId: message,)),
-    );
+
+  void clickNotification(Map<String, dynamic> message) async {
+    Platform.isAndroid
+        ? Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Chat(
+                      chatId: message["data"]["id"],
+                      chatName: message["data"]["name"],
+                      chatAvatar: message["data"]["photo_url"],
+                    )),
+          )
+        : Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Chat(
+                      chatId: message["id"],
+                      chatName: message["name"],
+                      chatAvatar: message["photo_url"],
+                    )),
+          );
+    _removeBadge();
+    print("$_appBadgeSupported");
+    return;
   }
 
   onMenuPress(selection) {
     if (selection.title == "Log out") signOutHandler();
     if (selection.title == "Settings")
-      Navigator.push(context, MaterialPageRoute(builder: (cxt) => SettingsScreen("SETTINGS")));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (cxt) => SettingsScreen("SETTINGS")));
     if (selection.title == "Profile")
-      Navigator.push(context, MaterialPageRoute(builder: (cxt) => SettingsScreen("PROFILE")));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (cxt) => SettingsScreen("PROFILE")));
 
     return;
   }
@@ -214,11 +267,14 @@ class _MainScreenState extends State<MainScreen> {
     });
 
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (ctx) => LoginScreen(title: "Tagness",)),
-            (Route<dynamic> route) => false);
+        MaterialPageRoute(
+            builder: (ctx) => LoginScreen(
+                  title: "Tagness",
+                )),
+        (Route<dynamic> route) => false);
   }
 
-  Future<bool> onBackPress(){
+  Future<bool> onBackPress() {
     OpenDialog(context);
     return Future.value(false);
   }
@@ -249,7 +305,8 @@ class _MainScreenState extends State<MainScreen> {
             },
           )
         ],
-        title: Text("Tagness Home Screen",
+        title: Text(
+          "Tagness Home Screen",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).accentColor,
@@ -293,7 +350,9 @@ class _MainScreenState extends State<MainScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => GenerateScreen(currentUserId: widget.currentUserId,),
+                        builder: (context) => GenerateScreen(
+                          currentUserId: widget.currentUserId,
+                        ),
                       ),
                     );
                   },
@@ -313,7 +372,9 @@ class _MainScreenState extends State<MainScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChatOverviewScreen(currentUserId: widget.currentUserId,),
+                        builder: (context) => ChatOverviewScreen(
+                          currentUserId: widget.currentUserId,
+                        ),
                       ),
                     );
                   },
@@ -328,13 +389,15 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-void _addBadge(){
+
+void _addBadge() {
   FlutterAppBadger.updateBadgeCount(1);
 }
 
-void _removeBadge(){
+void _removeBadge() {
   FlutterAppBadger.removeBadge();
 }
+
 //TODO: Make a separate file for selections
 class Selection {
   final String title;
