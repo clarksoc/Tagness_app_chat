@@ -7,12 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tagnessappchat/models/app_badge.dart';
-import 'package:tagnessappchat/screens/chat_overview_screen.dart';
 import 'package:uuid/uuid.dart';
 
 import '../widgets/build_item_chat.dart';
-import 'main_screen.dart';
+import '../models/app_badge.dart';
 
 class ChatScreen extends StatefulWidget {
   //TODO: Dismiss notification if on this page

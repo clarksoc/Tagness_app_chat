@@ -1,24 +1,14 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tagnessappchat/main.dart';
-import 'package:tagnessappchat/screens/chat_screen.dart';
-import 'package:tagnessappchat/models/pop_up_menu.dart';
-import 'package:tagnessappchat/screens/login_screen.dart';
 
+import 'login_screen.dart';
 import 'settings_screen.dart';
-import '../widgets/profile.dart';
 import '../widgets/build_item.dart';
 import '../widgets/loading.dart';
-import '../widgets/open_dialog.dart';
-import '../widgets/chat.dart';
 
 class ChatOverviewScreen extends StatefulWidget {
   final String currentUserId;

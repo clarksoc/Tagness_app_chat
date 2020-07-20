@@ -9,17 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tagnessappchat/screens/settings_screen.dart';
-import 'package:tagnessappchat/widgets/profile.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 
-import '../main.dart';
 import '../widgets/chat.dart';
 import '../widgets/open_dialog.dart';
 import 'chat_overview_screen.dart';
 import 'login_screen.dart';
 import 'scan_screen.dart';
-
+import 'settings_screen.dart';
 import 'generate_screen.dart';
 
 class MainScreen extends StatefulWidget {

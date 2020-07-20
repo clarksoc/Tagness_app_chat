@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tagnessappchat/screens/username_screen.dart';
 
-
+import 'username_screen.dart';
 import 'main_screen.dart';
 import '../widgets/loading.dart';
 

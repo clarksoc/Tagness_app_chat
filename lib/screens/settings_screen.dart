@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tagnessappchat/widgets/profile.dart';
-import 'package:tagnessappchat/widgets/user_form.dart';
 import 'package:uuid/uuid.dart';
+
+import '../widgets/profile.dart';
+import '../widgets/user_form.dart';
 
 class SettingsScreen extends StatefulWidget {
   final String title;

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
-import 'package:tagnessappchat/screens/login_screen.dart';
 
 import 'main_screen.dart';
+import 'login_screen.dart';
 
 class LaunchScreen extends StatefulWidget {
   @override
