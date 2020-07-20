@@ -62,7 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
     showSticker = false;
     imageUrl = "";
 
-    scrollController = new ScrollController()..addListener(_scrollListener);
+    //scrollController = new ScrollController()..addListener(_scrollListener);
 
     readLocal();
     removeBadge();
@@ -183,14 +183,6 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<bool> onBackPress(){
     Firestore.instance.collection("users").document(userId).updateData({"chattingWith": null});
     Navigator.of(context).pop();
-/*    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomeScreen(
-          currentUserId: userId,
-        ),
-      ),
-    );*/
     return Future.value(false);
   }
 
@@ -237,10 +229,6 @@ class _ChatScreenState extends State<ChatScreen> {
             );
           }),
     );
-  }
-
-  void _scrollListener(){
-
   }
 
 

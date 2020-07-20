@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tagnessappchat/screens/qr_screen.dart';
+import 'package:tagnessappchat/widgets/qr_form.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -17,6 +20,8 @@ class GenerateScreen extends StatefulWidget {
 }
 
 class _GenerateScreenState extends State<GenerateScreen> {
+  bool isLoading = false;
+
   String currentUserId;
 
   _GenerateScreenState({Key key, @required this.currentUserId});
@@ -26,26 +31,37 @@ class _GenerateScreenState extends State<GenerateScreen> {
   static const double _topSectionHeight = 50.0;
   SharedPreferences sharedPreferences;
 
-
   var uuid = Uuid();
 
   GlobalKey globalKey = new GlobalKey();
-  String _dataString = "Hello from this QR";
+  var _dataString = "";
+
+  var _dataQr = {
+    "type": "",
+    "holderName": "",
+    "contactName": "",
+    "username": "",
+    "url": "",
+    "email": "",
+    "phoneNumber": "",
+  };
+
   String displayName;
   String username;
-  String _inputErrorText;
   bool showQr = false;
-  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     readLocal();
   }
-  void readLocal() async{
+
+  void readLocal() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
     username = sharedPreferences.getString("username") ?? "";
+
+    _dataString = "tgns.to/$username/$currentUserId";
   }
 
   @override
@@ -59,63 +75,45 @@ class _GenerateScreenState extends State<GenerateScreen> {
         backgroundColor: Theme.of(context).accentColor,
         centerTitle: true,
       ),
-      body: _contentWidget(),
+      body: QrForm(_contentWidget, _dataString),
     );
   }
 
-  _contentWidget() {
+  _contentWidget(
+    BuildContext ctx,
+    String type,
+    String holderName,
+    String contactName,
+    String phoneNumber,
+    String email,
+    bool _showQr,
+  ) {
+    _dataQr ={
+      "type": type,
+      "holderName": holderName,
+      "contactName": contactName,
+      "username": username,
+      "url": _dataString,
+      "phoneNumber": phoneNumber,
+      "email": email,
+    };
+    showQr = _showQr;
+    _dataString = _dataString + randomAlphaNumeric(10).toString();
+    print(_dataQr.toString());
+    print(showQr);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QrScreen(_dataString, _dataQr),
+      ),
+    );
     final bodyHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).viewInsets.bottom;
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(
-              top: _topSectionTopPadding,
-              left: 20.0,
-              right: 10.0,
-              bottom: _topSectionBottomPadding,
-            ),
-            child: Container(
-              height: _topSectionHeight,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                      child: Center(
-                          child: Text(
-                    "Generate your unique ID!",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ))),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: FlatButton(
-                      color: Colors.blueGrey,
-                      textColor: Colors.white,
-                      child: Text(
-                        "SUBMIT",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _dataString = "tgns.to/$username/$currentUserId";
-                          showQr = true;
-                          _inputErrorText = null;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: showQr == false
+    return Expanded(
+            child: /*showQr == false
                 ? Center()
-                : Center(
+                :*/ Center(
                     child: RepaintBoundary(
                       key: globalKey,
                       child: QrImage(
@@ -124,9 +122,6 @@ class _GenerateScreenState extends State<GenerateScreen> {
                       ),
                     ),
                   ),
-          )
-        ],
-      ),
     );
   }
 }
