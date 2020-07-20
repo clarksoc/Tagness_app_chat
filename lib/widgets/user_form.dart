@@ -116,7 +116,7 @@ class _UserFormState extends State<UserForm> {
                       validator: validateDisplayName,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
-                        hintText: "Update your displayName!",
+                        hintText: "Update your Display Name!",
                         contentPadding: EdgeInsets.all(5.0),
                         hintStyle: TextStyle(
                           color: Colors.grey[300],
@@ -124,7 +124,7 @@ class _UserFormState extends State<UserForm> {
                       ),
                       controller: displayNameController,
                       onSaved: (value) {
-                        _userDisplayName = value.replaceAll(" ", "");
+                        _userDisplayName = value;
                       },
                     ),
                   ),

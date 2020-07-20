@@ -30,9 +30,6 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final textEditingController = TextEditingController();
-/*
-  var scrollController = ScrollController();
-*/
   SharedPreferences preferences;
 
   final FocusNode focusNode = FocusNode();
@@ -200,9 +197,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget buildListMessage() {
-    var progressIndicator = CircularProgressIndicator(
-        valueColor:
-            AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor));
     return Flexible(
       child: FutureBuilder(
           future: FirebaseAuth.instance.currentUser(),

@@ -36,6 +36,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
   GlobalKey globalKey = new GlobalKey();
   String _dataString = "Hello from this QR";
   String displayName;
+  String username;
   String _inputErrorText;
   bool showQr = false;
   final TextEditingController _textEditingController = TextEditingController();
@@ -48,7 +49,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
   void readLocal() async{
     sharedPreferences = await SharedPreferences.getInstance();
 
-    displayName = sharedPreferences.getString("displayName") ?? "";
+    username = sharedPreferences.getString("username") ?? "";
   }
 
   @override
@@ -104,7 +105,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
                       ),
                       onPressed: () {
                         setState(() {
-                          _dataString = "tgns.to/${displayName.replaceAll(" ", "")}/$currentUserId";
+                          _dataString = "tgns.to/$username/$currentUserId";
                           showQr = true;
                           _inputErrorText = null;
                         });

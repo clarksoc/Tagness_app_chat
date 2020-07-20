@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tagnessappchat/screens/username_screen.dart';
 
 
 import 'main_screen.dart';
@@ -30,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<Null> googleSignInHandler() async {
     preferences = await SharedPreferences.getInstance();
+    bool firstTime = preferences.getBool('first_time');
 
     this.setState(() {
       isLoading = true;
@@ -59,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
             .collection("users")
             .document(firebaseUser.uid)
             .setData({
-          "displayName": firebaseUser.displayName.replaceAll(" ", ""),
+          "displayName": firebaseUser.displayName,
           "photoUrl": firebaseUser.photoUrl,
           "id": firebaseUser.uid,
           "createdAt": Timestamp.now().toString(),
@@ -90,16 +92,30 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoading = false;
       });
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MainScreen(
-            currentUserId: firebaseUser.uid,
+      if(firstTime != null && !firstTime){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainScreen(
+              currentUserId: firebaseUser.uid,
+            ),
           ),
-        ),
-      );
+        );
+      }else{
+        preferences.setBool('first_time', false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserNameScreen(),
+          ),
+        );
+      }
+
+
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
