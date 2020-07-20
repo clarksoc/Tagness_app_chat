@@ -33,10 +33,9 @@ class _GenerateScreenState extends State<GenerateScreen> {
 
   var uuid = Uuid();
 
-  GlobalKey globalKey = new GlobalKey();
   var _dataString = "";
 
-  var _dataQr = {
+  Map <String, String> _dataQr = {
     "type": "",
     "holderName": "",
     "contactName": "",
@@ -88,7 +87,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
     String email,
     bool _showQr,
   ) {
-    _dataQr ={
+    _dataQr = {
       "type": type,
       "holderName": holderName,
       "contactName": contactName,
@@ -108,20 +107,19 @@ class _GenerateScreenState extends State<GenerateScreen> {
         builder: (context) => QrScreen(_dataString, _dataQr),
       ),
     );
-    final bodyHeight = MediaQuery.of(context).size.height -
+/*    final bodyHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).viewInsets.bottom;
     return Expanded(
-            child: /*showQr == false
+            child: *//*showQr == false
                 ? Center()
-                :*/ Center(
+                :*//* Center(
                     child: RepaintBoundary(
-                      key: globalKey,
                       child: QrImage(
                         data: _dataString,
                         size: 0.5 * bodyHeight,
                       ),
                     ),
                   ),
-    );
+    );*/
   }
 }
