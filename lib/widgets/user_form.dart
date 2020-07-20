@@ -14,7 +14,7 @@ class UserForm extends StatefulWidget {
 
   final void Function(
     BuildContext ctx,
-    String username,
+    String displayName,
     String email,
     String phoneNumber,
     String firstName,
@@ -29,13 +29,13 @@ class _UserFormState extends State<UserForm> {
 
   final _formKey = GlobalKey<FormState>();
 
-  String _userUsername;
+  String _userDisplayName;
   String _userEmail;
   String _userPhoneNumber;
   String _userFirstName;
   String _userLastName;
 
-  TextEditingController usernameController;
+  TextEditingController displayNameController;
   TextEditingController emailController;
   TextEditingController phoneNumberController;
   TextEditingController firstNameController;
@@ -53,13 +53,13 @@ class _UserFormState extends State<UserForm> {
   void readLocal() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    _userUsername = sharedPreferences.getString("username") ?? "";
+    _userDisplayName = sharedPreferences.getString("displayName") ?? "";
     _userEmail = sharedPreferences.getString("email") ?? "";
     _userPhoneNumber = sharedPreferences.getString("phoneNumber") ?? "";
     _userFirstName = sharedPreferences.getString("firstName") ?? "";
     _userLastName = sharedPreferences.getString("lastName") ?? "";
 
-    usernameController = TextEditingController(text: _userUsername);
+    displayNameController = TextEditingController(text: _userDisplayName);
     emailController = TextEditingController(text: _userEmail);
     phoneNumberController = TextEditingController(text: _userPhoneNumber);
     firstNameController = TextEditingController(text: _userFirstName);
@@ -77,7 +77,7 @@ class _UserFormState extends State<UserForm> {
       _formKey.currentState.save();
       widget.uploadFunction(
         context,
-        _userUsername.trim(),
+        _userDisplayName.trim(),
         _userEmail.trim(),
         _userPhoneNumber.trim(),
         _userFirstName.trim(),
@@ -99,7 +99,7 @@ class _UserFormState extends State<UserForm> {
               children: <Widget>[
                 Container(
                   child: Text(
-                    "Username",
+                    "Display Name",
                     style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,
@@ -112,19 +112,19 @@ class _UserFormState extends State<UserForm> {
                     data: Theme.of(context)
                         .copyWith(primaryColor: Theme.of(context).primaryColor),
                     child: TextFormField(
-                      key: ValueKey("username"),
-                      validator: validateUsername,
+                      key: ValueKey("displayName"),
+                      validator: validateDisplayName,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
-                        hintText: "Update your username!",
+                        hintText: "Update your displayName!",
                         contentPadding: EdgeInsets.all(5.0),
                         hintStyle: TextStyle(
                           color: Colors.grey[300],
                         ),
                       ),
-                      controller: usernameController,
+                      controller: displayNameController,
                       onSaved: (value) {
-                        _userUsername = value.replaceAll(" ", "");
+                        _userDisplayName = value.replaceAll(" ", "");
                       },
                     ),
                   ),
@@ -296,9 +296,9 @@ class _UserFormState extends State<UserForm> {
       return null;
   }
 
-  String validateUsername(String value) {
+  String validateDisplayName(String value) {
     if (value.length <= 4)
-      return 'Username must be more than 4 characters long!';
+      return 'Display Name must be more than 4 characters long!';
     else
       return null;
   }

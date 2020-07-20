@@ -27,37 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLogIn = false;
 
   FirebaseUser currentUser;
-/*
-  @override
-  void initState() {
-    super.initState();
-    isSignedIn();
-  }
-
-  void isSignedIn() async {
-    this.setState(() {
-      isLoading = true;
-    });
-
-    preferences = await SharedPreferences.getInstance();
-    isLogIn = await googleSignIn.isSignedIn();
-    print(isLogIn.toString());
-
-    if (isLogIn) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MainScreen(
-            currentUserId: preferences.getString("id"),
-          ),
-        ),
-      );
-    }
-
-    this.setState(() {
-      isLoading = false;
-    });
-  }*/
 
   Future<Null> googleSignInHandler() async {
     preferences = await SharedPreferences.getInstance();
@@ -90,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
             .collection("users")
             .document(firebaseUser.uid)
             .setData({
-          "username": firebaseUser.displayName.replaceAll(" ", ""),
+          "displayName": firebaseUser.displayName.replaceAll(" ", ""),
           "photoUrl": firebaseUser.photoUrl,
           "id": firebaseUser.uid,
           "createdAt": Timestamp.now().toString(),
@@ -103,13 +72,13 @@ class _LoginScreenState extends State<LoginScreen> {
         currentUser = firebaseUser;
 
         await preferences.setString("id", currentUser.uid);
-        await preferences.setString("username", currentUser.displayName);
+        await preferences.setString("displayName", currentUser.displayName);
         await preferences.setString("photoUrl", currentUser.photoUrl);
         await preferences.setString("phoneNumber", currentUser.phoneNumber);
       } else {
         //Existing user, retrieves data
         await preferences.setString("id", documents[0]["id"]);
-        await preferences.setString("username", documents[0]["username"]);
+        await preferences.setString("displayName", documents[0]["displayName"]);
         await preferences.setString("photoUrl", documents[0]["photoUrl"]);
         await preferences.setString("phoneNumber", documents[0]["phoneNumber"]);
         await preferences.setString("email", documents[0]["email"]);

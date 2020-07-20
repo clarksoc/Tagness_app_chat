@@ -8,7 +8,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String _userUsername;
+  String _userDisplayName;
   String _userEmail;
   String _userPhoneNumber;
   String _userFirstName;
@@ -26,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void readLocal() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
-    _userUsername = sharedPreferences.getString("username") ?? "";
+    _userDisplayName = sharedPreferences.getString("displayName") ?? "";
     _userEmail = sharedPreferences.getString("email") ?? "";
     _userPhoneNumber = sharedPreferences.getString("phoneNumber") ?? "";
     _userFirstName = sharedPreferences.getString("firstName") ?? "";
@@ -58,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Theme.of(context).primaryColor),
                         ),
                         Text(
-                          "$_userUsername",
+                          "$_userDisplayName",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 25,

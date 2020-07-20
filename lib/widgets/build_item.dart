@@ -46,7 +46,7 @@ Widget buildItem(
             Flexible(
               child: Container(
                 child: Text(
-                  "${documentSnapshot["username"]}",
+                  "${documentSnapshot["displayName"]}",
                   style: TextStyle(color: Colors.black),
                 ),
                 alignment: Alignment.centerLeft,
@@ -62,7 +62,7 @@ Widget buildItem(
               builder: (context) => Chat(
                 chatId: documentSnapshot.documentID,
                 chatAvatar: documentSnapshot["photoUrl"],
-                chatName: documentSnapshot["username"],
+                chatName: documentSnapshot["displayName"],
               ),
             ),
           );

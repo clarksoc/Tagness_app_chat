@@ -35,7 +35,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
 
   GlobalKey globalKey = new GlobalKey();
   String _dataString = "Hello from this QR";
-  String username;
+  String displayName;
   String _inputErrorText;
   bool showQr = false;
   final TextEditingController _textEditingController = TextEditingController();
@@ -48,7 +48,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
   void readLocal() async{
     sharedPreferences = await SharedPreferences.getInstance();
 
-    username = sharedPreferences.getString("username") ?? "";
+    displayName = sharedPreferences.getString("displayName") ?? "";
   }
 
   @override
@@ -64,24 +64,6 @@ class _GenerateScreenState extends State<GenerateScreen> {
       ),
       body: _contentWidget(),
     );
-  }
-
-  Future<void> _captureAndSharePng() async {
-    try {
-      RenderRepaintBoundary boundary =
-          globalKey.currentContext.findRenderObject();
-      var image = await boundary.toImage();
-      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
-      /*Uint8List pngBytes = byteData.buffer.asUint8List();
-
-      final tempDir = await getTemporaryDirectory();
-      final file = await File("${tempDir.path}/image.png").create();
-
-      final channel = const MethodChannel("channel:me.con.share/share");
-      channel.invokeMethod("shareFile", "image.png");*/
-    } catch (e) {
-      print(e.toString());
-    }
   }
 
   _contentWidget() {
@@ -122,7 +104,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
                       ),
                       onPressed: () {
                         setState(() {
-                          _dataString = "tgns.to/${username.replaceAll(" ", "")}/$currentUserId";
+                          _dataString = "tgns.to/${displayName.replaceAll(" ", "")}/$currentUserId";
                           showQr = true;
                           _inputErrorText = null;
                         });

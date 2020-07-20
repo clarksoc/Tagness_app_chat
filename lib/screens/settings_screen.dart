@@ -20,13 +20,13 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
 
-  final usernameFocusNode = FocusNode();
+  final displayNameFocusNode = FocusNode();
   final emailFocusNode = FocusNode();
   final phoneNumberFocusNode = FocusNode();
   final firstNameFocusNode = FocusNode();
   final lastNameFocusNode = FocusNode();
 
-  TextEditingController usernameController;
+  TextEditingController displayNameController;
   TextEditingController emailController;
   TextEditingController phoneNumberController;
   TextEditingController firstNameController;
@@ -36,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   String userId = "";
   String email = "";
-  String username = "";
+  String displayName = "";
   String phoneNumber = "";
   String firstName = "";
   String lastName = "";
@@ -58,7 +58,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     sharedPreferences = await SharedPreferences.getInstance();
 
     userId = sharedPreferences.getString("id") ?? "";
-    username = sharedPreferences.getString("username") ?? "";
+    displayName = sharedPreferences.getString("displayName") ?? "";
     email = sharedPreferences.getString("email") ?? "";
     phoneNumber = sharedPreferences.getString("phoneNumber") ?? "";
     firstName = sharedPreferences.getString("firstName") ?? "";
@@ -90,14 +90,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     StorageUploadTask storageUploadTask =
         storageReference.putFile(userImageFile);
     StorageTaskSnapshot storageTaskSnapshot;
-    Firestore.instance.collection("users").document(userId).collection("username");
+    Firestore.instance.collection("users").document(userId).collection("displayName");
     storageUploadTask.onComplete.then((value) {
       if (value.error == null) {
         storageTaskSnapshot = value;
         storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
           photoUrl = downloadUrl;
           Firestore.instance.collection("users").document(userId).updateData({
-            "username": username,
+            "displayName": displayName,
             "email": email,
             "phoneNumber": phoneNumber,
             "firstName": firstName,
@@ -137,7 +137,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void updateData(
     BuildContext ctx,
-    String username,
+    String displayName,
     String email,
     String phoneNumber,
     String firstName,
@@ -150,14 +150,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
 
     Firestore.instance.collection("users").document(userId).updateData({
-      "username": username,
+      "displayName": displayName,
       "email": email,
       "phoneNumber": phoneNumber,
       "firstName": firstName,
       "lastName": lastName,
       "photoUrl": photoUrl,
     }).then((data) async {
-      await sharedPreferences.setString("username", username);
+      await sharedPreferences.setString("displayName", displayName);
       await sharedPreferences.setString("email", email);
       await sharedPreferences.setString("phoneNumber", phoneNumber);
       await sharedPreferences.setString("firstName", firstName);
