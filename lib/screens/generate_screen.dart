@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tagnessappchat/screens/qr_overview_screen.dart';
 import 'package:tagnessappchat/screens/qr_screen.dart';
 import 'package:tagnessappchat/widgets/qr_form.dart';
 import 'package:uuid/uuid.dart';
@@ -35,7 +37,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
 
   var _dataString = "";
 
-  Map <String, String> _dataQr = {
+  Map<String, String> _dataQr = {
     "type": "",
     "holderName": "",
     "contactName": "",
@@ -47,12 +49,15 @@ class _GenerateScreenState extends State<GenerateScreen> {
 
   String displayName;
   String username;
+  String qrCodeId;
   bool showQr = false;
+  int counter = 0;
 
   @override
   void initState() {
     super.initState();
     readLocal();
+    doesExist();
   }
 
   void readLocal() async {
@@ -60,11 +65,30 @@ class _GenerateScreenState extends State<GenerateScreen> {
 
     username = sharedPreferences.getString("username") ?? "";
 
-    _dataString = "tgns.to/$username/$currentUserId";
+    _dataString = "www.tgns.to/$username/";
+    setState(() {});
+  }
+
+  void doesExist() async {
+    DocumentSnapshot documentSnapshot = await Firestore.instance
+        .collection("users")
+        .document(currentUserId)
+        .collection("QrCodes")
+        .document("AmountOfCodes")
+        .get();
+    if (!documentSnapshot.exists) {
+      Firestore.instance
+          .collection("users")
+          .document(currentUserId)
+          .collection("QrCodes")
+          .document("AmountOfCodes")
+          .setData({"qrCount": 0});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    counter++;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -80,26 +104,55 @@ class _GenerateScreenState extends State<GenerateScreen> {
 
   _contentWidget(
     BuildContext ctx,
+    String username,
     String type,
     String holderName,
     String contactName,
     String phoneNumber,
     String email,
+    String url,
+    String details,
     bool _showQr,
-  ) {
+  ) async {
+    var qrCodesRef = Firestore.instance
+        .collection("users")
+        .document(currentUserId)
+        .collection("QrCodes")
+        .document("AmountOfCodes");
+    var batch = Firestore.instance.batch();
+    batch.updateData(
+      qrCodesRef,
+      {"qrCount": FieldValue.increment(1)},
+    );
+    batch.commit();
     _dataQr = {
       "type": type,
       "holderName": holderName,
       "contactName": contactName,
       "username": username,
-      "url": _dataString,
+      "url": "$_dataString${await qrCodesRef.get().then((value) => value.data["qrCount"])}",
       "phoneNumber": phoneNumber,
       "email": email,
+      "details": details,
     };
     showQr = _showQr;
-    _dataString = _dataString + randomAlphaNumeric(10).toString();
     print(_dataQr.toString());
     print(showQr);
+    Firestore.instance
+        .collection("users")
+        .document(currentUserId)
+        .collection("QrCodes")
+        .document("QRCode_${randomAlphaNumeric(10)}")
+        .setData({
+      "type": type,
+      "holderNAme": holderName,
+      "contactName": contactName,
+      "username": username,
+      "url":
+          "$_dataString${await qrCodesRef.get().then((value) => value.data["qrCount"])}",
+      "phoneNumber": phoneNumber,
+      "email": email,
+    });
 
     Navigator.push(
       context,
@@ -107,19 +160,5 @@ class _GenerateScreenState extends State<GenerateScreen> {
         builder: (context) => QrScreen(_dataString, _dataQr),
       ),
     );
-/*    final bodyHeight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).viewInsets.bottom;
-    return Expanded(
-            child: *//*showQr == false
-                ? Center()
-                :*//* Center(
-                    child: RepaintBoundary(
-                      child: QrImage(
-                        data: _dataString,
-                        size: 0.5 * bodyHeight,
-                      ),
-                    ),
-                  ),
-    );*/
   }
 }

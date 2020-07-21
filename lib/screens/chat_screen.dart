@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tagnessappchat/screens/chat_overview_screen.dart';
 import 'package:uuid/uuid.dart';
 
 import '../widgets/build_item_chat.dart';
 import '../models/app_badge.dart';
+import 'main_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   //TODO: Dismiss notification if on this page
@@ -18,7 +20,8 @@ class ChatScreen extends StatefulWidget {
   final String chatAvatar;
   final String payload;
 
-  ChatScreen({Key key, @required this.chatId, @required this.chatAvatar, this.payload})
+  ChatScreen(
+      {Key key, @required this.chatId, @required this.chatAvatar, this.payload})
       : super(key: key);
 
   @override
@@ -79,9 +82,6 @@ class _ChatScreenState extends State<ChatScreen> {
       groupChatId = "$chatId-$userId";
     }
 
-    print(chatId);
-    print(groupChatId);
-
     fireStoreInstance
         .collection("users")
         .document(userId)
@@ -121,7 +121,6 @@ class _ChatScreenState extends State<ChatScreen> {
         isLoading = false;
       });
       Fluttertoast.showToast(msg: "File is not an image");
-
     });
   }
 
@@ -180,9 +179,20 @@ class _ChatScreenState extends State<ChatScreen> {
       onWillPop: onBackPress,
     );
   }
-  Future<bool> onBackPress(){
-    Firestore.instance.collection("users").document(userId).updateData({"chattingWith": null});
-    Navigator.of(context).pop();
+
+  Future<bool> onBackPress() {
+    Firestore.instance
+        .collection("users")
+        .document(userId)
+        .updateData({"chattingWith": null});
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatOverviewScreen(
+          currentUserId: userId,
+        ),
+      ),
+    );
     return Future.value(false);
   }
 
@@ -230,7 +240,6 @@ class _ChatScreenState extends State<ChatScreen> {
           }),
     );
   }
-
 
   Widget buildInput() {
     return Container(

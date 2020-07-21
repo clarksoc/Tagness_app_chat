@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
-class Messages extends StatelessWidget {
+/*class Messages extends StatelessWidget {
   Messages(this.message, this.userName, this.userImage, this.isUser,
       {this.key});
 
@@ -83,7 +83,7 @@ class Messages extends StatelessWidget {
       overflow: Overflow.visible,
     );
   }
-}
+}*/
 
 Widget buildItemChat(BuildContext context, int index,
     DocumentSnapshot documentSnapshot, userId, fromId) {

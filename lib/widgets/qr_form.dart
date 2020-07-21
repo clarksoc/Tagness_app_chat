@@ -8,11 +8,14 @@ class QrForm extends StatefulWidget {
 
   final void Function(
     BuildContext ctx,
+    String username,
     String type,
     String holderName,
     String contactName,
     String phoneNumber,
     String email,
+    String url,
+    String details,
     bool showQr,
   ) qrFunction;
 
@@ -30,6 +33,7 @@ class _QrFormState extends State<QrForm> {
   String _qrFormHolderName;
   String _qrFormEmail;
   String _qrFormUrl;
+  String _qrFormDetails;
 
   bool _showQrCode = false;
 
@@ -37,6 +41,7 @@ class _QrFormState extends State<QrForm> {
   TextEditingController phoneNumberController;
   TextEditingController contactNameController;
   TextEditingController holderNameController;
+  TextEditingController detailsController;
 
   SharedPreferences sharedPreferences;
 
@@ -48,6 +53,7 @@ class _QrFormState extends State<QrForm> {
     "url": "",
     "email": "",
     "phoneNumber": "",
+    "details": "",
   };
 
   List<String> _holderTypes = ["Elder", "Adult", "Child", "Animal"];
@@ -69,11 +75,14 @@ class _QrFormState extends State<QrForm> {
             sharedPreferences.getString("lastName")) ??
         "";
     _qrFormHolderName = "";
+    _qrFormUrl = widget.dataString;
+    _qrFormDetails = "";
 
     emailController = TextEditingController(text: _qrFormEmail);
     phoneNumberController = TextEditingController(text: _qrFormPhoneNumber);
     contactNameController = TextEditingController(text: _qrFormContactName);
     holderNameController = TextEditingController(text: _qrFormHolderName);
+    detailsController = TextEditingController(text: _qrFormDetails);
 
     setState(() {});
   }
@@ -87,11 +96,14 @@ class _QrFormState extends State<QrForm> {
       _formKey.currentState.save();
       widget.qrFunction(
         context,
+        _qrFormUsername,
         _qrFormType.trim(),
         _qrFormHolderName.trim(),
         _qrFormContactName.trim(),
         _qrFormPhoneNumber.trim(),
         _qrFormEmail.trim(),
+        _qrFormUrl,
+        _qrFormDetails.trim(),
         _showQrCode,
       );
 
@@ -110,7 +122,7 @@ class _QrFormState extends State<QrForm> {
               key: _formKey,
               child: Column(
                 children: <Widget>[
-                  DropdownButton(
+                  DropdownButtonFormField(
                     hint: Text("Please choose a holder type"),
                     value: _qrFormType,
                     onChanged: (newValue){
@@ -124,6 +136,7 @@ class _QrFormState extends State<QrForm> {
                         value: type,
                       );
                     }).toList(),
+                    validator: validateDropDown,
                   ),
                   Container(
                     child: Text(
@@ -161,7 +174,7 @@ class _QrFormState extends State<QrForm> {
                   ),
                   Container(
                     child: Text(
-                      "Holder's Name",
+                      "QR Holder's Name",
                       style: TextStyle(
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.bold,
@@ -209,7 +222,7 @@ class _QrFormState extends State<QrForm> {
                           .copyWith(primaryColor: Theme.of(context).primaryColor),
                       child: TextFormField(
                         key: ValueKey("email"),
-                        validator: validateName,
+                        validator: validateEmail,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           hintText:
@@ -243,7 +256,7 @@ class _QrFormState extends State<QrForm> {
                           .copyWith(primaryColor: Theme.of(context).primaryColor),
                       child: TextFormField(
                         key: ValueKey("phoneNumber"),
-                        validator: validateName,
+                        validator: validatePhoneNumber,
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           hintText:
@@ -256,6 +269,41 @@ class _QrFormState extends State<QrForm> {
                         controller: phoneNumberController,
                         onSaved: (value) {
                           _qrFormPhoneNumber = value;
+                        },
+                      ),
+                    ),
+                    margin: EdgeInsets.symmetric(horizontal: 30.0),
+                  ),
+                  Container(
+                    child: Text(
+                      "Description",
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColor),
+                    ),
+                    margin: EdgeInsets.only(left: 10.0, bottom: 5.0, top: 10.0),
+                  ),
+                  Container(
+                    child: Theme(
+                      data: Theme.of(context)
+                          .copyWith(primaryColor: Theme.of(context).primaryColor),
+                      child: TextFormField(
+                        key: ValueKey("details"),
+                        validator: validateDescription,
+                        keyboardType: TextInputType.text,
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          hintText:
+                          "Please enter a short description of the QR Holder",
+                          contentPadding: EdgeInsets.all(5.0),
+                          hintStyle: TextStyle(
+                            color: Colors.grey[300],
+                          ),
+                        ),
+                        controller: detailsController,
+                        onSaved: (value) {
+                          _qrFormDetails = value;
                         },
                       ),
                     ),
@@ -275,7 +323,8 @@ class _QrFormState extends State<QrForm> {
                       EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                     ),
                     margin: EdgeInsets.symmetric(vertical: 50.0),
-                  )
+                  ),
+
                 ],
                 crossAxisAlignment: CrossAxisAlignment.start,
               ),
@@ -285,11 +334,40 @@ class _QrFormState extends State<QrForm> {
       ),
     );
   }
-
+  String validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Enter Valid Email';
+    else
+      return null;
+  }
   String validateName(String value){
-    if (value.length <= 4)
+    if (value.length <= 1)
       return 'Display Name must be more than 4 characters long!';
     else
       return null;
+  }
+  String validateDropDown(String value){
+    if(value.isEmpty){
+      return "Please choose an option in the drop down";
+    }
+    else return null;
+  }
+  String validatePhoneNumber(String value) {
+    String pattern = r'(^([0-9]{10}$))';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return 'Please enter phone number';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Please enter valid phone number';
+    }
+    return null;
+  }
+  String validateDescription(String value){
+    if(value.length < 10){
+      return "Please enter a description of more than 10 characters";
+    }else return null;
   }
 }
