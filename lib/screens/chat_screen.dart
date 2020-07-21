@@ -185,6 +185,7 @@ class _ChatScreenState extends State<ChatScreen> {
         .collection("users")
         .document(userId)
         .updateData({"chattingWith": null});
+    Navigator.of(context).pop();
     Navigator.push(
       context,
       MaterialPageRoute(

@@ -134,6 +134,7 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
     );
   }
   Future<bool> onBackPress() {
+    Navigator.of(context).pop();
     Navigator.push(
       context,
       MaterialPageRoute(

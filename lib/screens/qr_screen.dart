@@ -63,7 +63,7 @@ class _QrScreenState extends State<QrScreen> {
     );
   }
   Future<bool> onBackPress() {
-    Navigator.pop(context);
+    Navigator.of(context).pop();
     return Future.value(false);
   }
 }
