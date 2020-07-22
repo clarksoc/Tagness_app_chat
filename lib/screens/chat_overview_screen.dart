@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagnessappchat/screens/main_screen.dart';
 
 import 'login_screen.dart';
@@ -31,9 +32,26 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
       FlutterLocalNotificationsPlugin();
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
+  SharedPreferences sharedPreferences;
+
   var fireInstance = Firestore.instance;
   var fireAuth = FirebaseAuth.instance;
   bool isLoading = false;
+  String userId;
+
+  @override
+  void initState() {
+    super.initState();
+    readLocal();
+  }
+
+  void readLocal() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    userId = sharedPreferences.getString("id") ?? "";
+
+    setState(() {});
+  }
 
   List<Selection> selections = const <Selection>[
     //Drop down menu options
@@ -119,7 +137,7 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
                     } else {
                       return ListView.builder(
                           itemBuilder: (context, index) => buildItem(context,//calls the build_item widget and passes in the current User
-                              snapshot.data.documents[index], currentUserId),
+                              snapshot.data.documents[index], userId),
                           itemCount: snapshot.data.documents.length,
                         );
                     }
@@ -135,13 +153,6 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
   }
   Future<bool> onBackPress() {
     Navigator.of(context).pop();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MainScreen(
-        ),
-      ),
-    );
     return Future.value(false);
   }
 }

@@ -65,7 +65,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
 
     username = sharedPreferences.getString("username") ?? "";
 
-    _dataString = "www.tgns.to/$username/";
+    _dataString = "tgns.to/$username/";
     setState(() {});
   }
 
@@ -130,7 +130,8 @@ class _GenerateScreenState extends State<GenerateScreen> {
       "holderName": holderName,
       "contactName": contactName,
       "username": username,
-      "url": "$_dataString${await qrCodesRef.get().then((value) => value.data["qrCount"])}",
+      "url":
+          "$_dataString${await qrCodesRef.get().then((value) => value.data["qrCount"])}",
       "phoneNumber": phoneNumber,
       "email": email,
       "details": details,
@@ -143,16 +144,18 @@ class _GenerateScreenState extends State<GenerateScreen> {
         .document(currentUserId)
         .collection("QrCodes")
         .document("QRCode_${randomAlphaNumeric(10)}")
-        .setData({
-      "type": type,
-      "holderNAme": holderName,
-      "contactName": contactName,
-      "username": username,
-      "url":
-          "$_dataString${await qrCodesRef.get().then((value) => value.data["qrCount"])}",
-      "phoneNumber": phoneNumber,
-      "email": email,
-    });
+        .setData(
+      {
+        "type": type,
+        "holderNAme": holderName,
+        "contactName": contactName,
+        "username": username,
+        "url":
+            "$_dataString${await qrCodesRef.get().then((value) => value.data["qrCount"])}",
+        "phoneNumber": phoneNumber,
+        "email": email,
+      },
+    );
 
     Navigator.push(
       context,

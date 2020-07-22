@@ -10,6 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/chat.dart';
 import '../widgets/open_dialog.dart';
@@ -48,8 +49,10 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  SharedPreferences sharedPreferences;
 
   String _appBadgeSupported = "Unknown";
+  String userId;
   int counter = 1;
   int groupCounter = 1;
 
@@ -57,6 +60,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    readLocal();
     initPlatformState();
     registerNotification();
     configureLocalNotification();
@@ -96,6 +100,13 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     setState(() {
       _appBadgeSupported = appBadgeSupported;
     });
+  }
+  void readLocal() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    userId = sharedPreferences.getString("id") ?? "";
+
+    setState(() {});
   }
 
   void registerNotification() {
@@ -360,7 +371,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                       context,
                       MaterialPageRoute(
                         builder: (context) => GenerateScreen(
-                          currentUserId: widget.currentUserId,
+                          currentUserId: userId,
                         ),
                       ),
                     );
@@ -382,7 +393,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ChatOverviewScreen(
-                          currentUserId: widget.currentUserId,
+                          currentUserId: userId,
                         ),
                       ),
                     );
