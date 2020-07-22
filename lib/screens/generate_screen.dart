@@ -147,7 +147,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
         .setData(
       {
         "type": type,
-        "holderNAme": holderName,
+        "holderName": holderName,
         "contactName": contactName,
         "username": username,
         "url":
@@ -160,7 +160,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QrScreen(_dataString, _dataQr),
+        builder: (context) => QrScreen(_dataQr) /*QrOverviewScreen(_dataString, _dataQr)*/,
       ),
     );
   }

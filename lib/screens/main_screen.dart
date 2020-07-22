@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tagnessappchat/screens/qr_overview_screen.dart';
 
 import '../widgets/chat.dart';
 import '../widgets/open_dialog.dart';
@@ -377,6 +378,26 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                     );
                   },
                   child: const Text("GENERATE QR CODE"),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 18,
+                ),
+                child: RaisedButton(
+                  color: Colors.cyan,
+                  textColor: Colors.black,
+                  splashColor: Colors.blueGrey,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QrOverviewScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text("VIEW QR CODES"),
                 ),
               ),
               Padding(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagnessappchat/screens/main_screen.dart';
 
 class QrScreen extends StatefulWidget {
-  QrScreen(this.dataString, this.dataQr);
+  QrScreen(this.dataQr);
 
-  final String dataString;
   final Map<String, String> dataQr;
 
   @override
@@ -14,6 +14,24 @@ class QrScreen extends StatefulWidget {
 
 class _QrScreenState extends State<QrScreen> {
   GlobalKey globalKey = new GlobalKey();
+  SharedPreferences sharedPreferences;
+  String userId;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    readLocal();
+  }
+
+  readLocal() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    userId = sharedPreferences.getString("id") ?? "";
+
+    setState(() {});
+  }
+
+
 
 
 
