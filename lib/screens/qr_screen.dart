@@ -74,6 +74,22 @@ class _QrScreenState extends State<QrScreen> {
                   ),
                 ),
             ),
+            RaisedButton(
+              child: Text(
+                "BACK TO HOME",
+                style: TextStyle(fontSize: 16.0),
+              ),
+              color: Theme.of(context).primaryColor,
+              splashColor: Colors.transparent,
+              textColor: Colors.black,
+              padding: EdgeInsets.symmetric(
+                  horizontal: 30.0, vertical: 10.0),
+              onPressed: () => Navigator.push(context, MaterialPageRoute(
+                builder: (context) => MainScreen(
+                  currentUserId: userId,
+                ),
+              )),
+            ),
           ],
         ),
       ),
