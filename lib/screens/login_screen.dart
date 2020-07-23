@@ -86,7 +86,10 @@ class _LoginScreenState extends State<LoginScreen> {
         await preferences.setString("firstName", documents[0]["firstName"]);
         await preferences.setString("lastName", documents[0]["lastName"]);
       }
-      Fluttertoast.showToast(msg: "Sign in Successful");
+      Fluttertoast.showToast(msg: "Sign in Successful",
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+      );
       this.setState(() {
         isLoading = false;
       });

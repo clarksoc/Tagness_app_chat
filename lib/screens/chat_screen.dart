@@ -120,7 +120,10 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         isLoading = false;
       });
-      Fluttertoast.showToast(msg: "File is not an image");
+      Fluttertoast.showToast(msg: "File is not an image",
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+      );
     });
   }
 
@@ -150,7 +153,10 @@ class _ChatScreenState extends State<ChatScreen> {
       scrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
-      Fluttertoast.showToast(msg: "Message is empty");
+      Fluttertoast.showToast(msg: "Message is empty",
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+      );
     }
   }
 

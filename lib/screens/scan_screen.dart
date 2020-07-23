@@ -1,6 +1,7 @@
 import 'package:barcode_scan/platform_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tagnessappchat/widgets/scan_form.dart';
 
 class ScanScreen extends StatefulWidget {
   @override
@@ -20,41 +21,51 @@ class _ScanScreenState extends State<ScanScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "QR Code Scanner",
+          "QR Code Finder",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).accentColor,
         centerTitle: true,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 16,
+        child: Card(
+          margin: EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
+                child: ScanForm(),
               ),
-              child: RaisedButton(
-                color: Colors.cyan,
-                textColor: Colors.black,
-                splashColor: Colors.blueGrey,
-                onPressed: startScan,
-                child: const Text("START CAMERA SCAN"),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
+                child: RaisedButton(
+                  color: Colors.cyan,
+                  textColor: Colors.black,
+                  splashColor: Colors.blueGrey,
+                  onPressed: startScan,
+                  child: const Text("START CAMERA SCAN"),
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 16,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
+                child: Text(
+                  qrCode,
+                  textAlign: TextAlign.center,
+                ),
               ),
-              child: Text(
-                qrCode,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

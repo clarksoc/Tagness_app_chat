@@ -154,6 +154,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
             "$_dataString${await qrCodesRef.get().then((value) => value.data["qrCount"])}",
         "phoneNumber": phoneNumber,
         "email": email,
+        "details": details,
       },
     );
 

@@ -155,7 +155,10 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           .document(widget.currentUserId)
           .updateData({"pushToken": token});
     }).catchError((onError) {
-      Fluttertoast.showToast(msg: onError.message.toString());
+      Fluttertoast.showToast(msg: onError.message.toString(),
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+      );
     });
   }
 

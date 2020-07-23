@@ -53,7 +53,10 @@ class _UserNameScreenState extends State<UserNameScreen> {
         isLoading = false;
       });
 
-      Fluttertoast.showToast(msg: "Username Set!");
+      Fluttertoast.showToast(msg: "Username Set!",
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+      );
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -67,7 +70,10 @@ class _UserNameScreenState extends State<UserNameScreen> {
         isLoading = false;
       });
 
-      Fluttertoast.showToast(msg: error.toString());
+      Fluttertoast.showToast(msg: error.toString(),
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+      );
     });
   }
 

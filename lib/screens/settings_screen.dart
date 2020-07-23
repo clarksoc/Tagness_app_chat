@@ -109,30 +109,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
             setState(() {
               isLoading = false;
             });
-            Fluttertoast.showToast(msg: "Upload Successful!");
+            Fluttertoast.showToast(msg: "Upload Successful!",
+              backgroundColor: Colors.grey,
+              textColor: Colors.black,
+            );
           }).catchError((error) {
             setState(() {
               isLoading = false;
             });
-            Fluttertoast.showToast(msg: error.toString());
+            Fluttertoast.showToast(msg: error.toString(),
+              backgroundColor: Colors.grey,
+              textColor: Colors.black,
+            );
           });
         }, onError: (error) {
           setState(() {
             isLoading = false;
           });
-          Fluttertoast.showToast(msg: "This file is not an image!");
+          Fluttertoast.showToast(msg: "This file is not an image!",
+            backgroundColor: Colors.grey,
+            textColor: Colors.black,
+          );
         });
       } else {
         setState(() {
           isLoading = false;
         });
-        Fluttertoast.showToast(msg: "This file is not an image!");
+        Fluttertoast.showToast(msg: "This file is not an image!",
+          backgroundColor: Colors.grey,
+          textColor: Colors.black,
+        );
       }
     }, onError: (error) {
       setState(() {
         isLoading = false;
       });
-      Fluttertoast.showToast(msg: error.toString());
+      Fluttertoast.showToast(msg: error.toString(),
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+      );
     });
   }
 
@@ -167,12 +182,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
       setState(() {
         isLoading = false;
       });
-      Fluttertoast.showToast(msg: "Update Successful!");
+      Fluttertoast.showToast(msg: "Update Successful!",
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+      );
     }).catchError((error) {
       setState(() {
         isLoading = false;
       });
-      Fluttertoast.showToast(msg: error.toString());
+      Fluttertoast.showToast(msg: error.toString(),
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+      );
     });
   }
 

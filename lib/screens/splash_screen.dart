@@ -26,7 +26,9 @@ class _LaunchScreenState extends State<LaunchScreen> {
   @override
   void initState() {
     super.initState();
+    //FocusScope.of(context).unfocus();//closes keyboard as app opens
     isSignedIn();
+
   }
 
   void isSignedIn() async {
