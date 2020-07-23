@@ -51,7 +51,7 @@ class _ScanFormState extends State<ScanForm> {
     if (documentList.isEmpty) {
       Fluttertoast.showToast(
         msg: "No user found with that username",
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.grey[200],
         textColor: Colors.black,
       );
       print("No user found");
@@ -71,7 +71,7 @@ class _ScanFormState extends State<ScanForm> {
 
       if (qrList.isEmpty) {
         Fluttertoast.showToast(msg: "No QR code was found with that link",
-          backgroundColor: Colors.grey,
+          backgroundColor: Colors.grey[200],
           textColor: Colors.black,
         );
         print("No QR code was found for that user with that Id");
@@ -79,6 +79,11 @@ class _ScanFormState extends State<ScanForm> {
           isLoading = false;
         });
       } else {
+        Fluttertoast.showToast(
+          msg: "QR Code Found",
+          backgroundColor: Colors.grey[200],
+          textColor: Colors.black,
+        );
         this.setState(() {
           isLoading = false;
         });
