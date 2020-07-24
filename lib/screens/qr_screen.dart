@@ -67,9 +67,9 @@ class _QrScreenState extends State<QrScreen> {
                   key: globalKey,
                   child: QrImage(
                     data: _dataQr["url"],
-                    embeddedImage: AssetImage("images/flutter_logo.png"),
+                    /*embeddedImage: AssetImage("images/flutter_logo.png"),
                     embeddedImageStyle: QrEmbeddedImageStyle(
-                        size: Size(100, 100)),
+                        size: Size(100, 100)),*/
                     //size: 0.5 * bodyHeight,
                   ),
                 ),

@@ -152,7 +152,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       print("Token: $token");
       fireInstance
           .collection("users")
-          .document(widget.currentUserId)
+          .document(userId)
           .updateData({"pushToken": token});
     }).catchError((onError) {
       Fluttertoast.showToast(msg: onError.message.toString(),

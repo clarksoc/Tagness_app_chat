@@ -1,7 +1,10 @@
 import 'package:barcode_scan/platform_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tagnessappchat/models/find_user.dart';
+import 'package:tagnessappchat/screens/main_screen.dart';
 import 'package:tagnessappchat/widgets/scan_form.dart';
+import '../widgets/scan_form.dart' as scanForm;
 
 class ScanScreen extends StatefulWidget {
   @override
@@ -27,48 +30,46 @@ class _ScanScreenState extends State<ScanScreen> {
         backgroundColor: Theme.of(context).accentColor,
         centerTitle: true,
       ),
-      body: Center(
-        child: Card(
-          margin: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16,
+      body: WillPopScope(
+        child: Center(
+          child: Card(
+            margin: EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  child: ScanForm(),
                 ),
-                child: ScanForm(),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16,
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  child: RaisedButton(
+                    color: Colors.cyan,
+                    textColor: Colors.black,
+                    splashColor: Colors.blueGrey,
+                    onPressed: startScan,
+                    child: const Text("START CAMERA SCAN"),
+                  ),
                 ),
-                child: RaisedButton(
-                  color: Colors.cyan,
-                  textColor: Colors.black,
-                  splashColor: Colors.blueGrey,
-                  onPressed: startScan,
-                  child: const Text("START CAMERA SCAN"),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16,
-                ),
-                child: Text(
-                  qrCode,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
+        onWillPop: onBackPress,
       ),
     );
+  }
+
+  Future<bool> onBackPress() {
+    Navigator.of(context).pop();
+    return Future.value(false);
   }
 
   Future startScan() async {
@@ -77,6 +78,7 @@ class _ScanScreenState extends State<ScanScreen> {
       setState(() {
         this.qrCode = qrCode.rawContent;
       });
+      findUserUrl(this.context, this.qrCode);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.cameraAccessDenied) {
         setState(() {

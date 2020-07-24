@@ -2,15 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tagnessappchat/screens/user_found_screen.dart';
+import '../models/find_user.dart';
 
 import 'loading.dart';
 
 class ScanForm extends StatefulWidget {
+  final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   @override
   _ScanFormState createState() => _ScanFormState();
 }
 
-class _ScanFormState extends State<ScanForm> {
+class _ScanFormState extends State<ScanForm> with RouteAware {
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   String _qrCodeUrl;
@@ -22,23 +24,35 @@ class _ScanFormState extends State<ScanForm> {
   @override
   void initState() {
     super.initState();
-    isLoading = false;
+    this.setState(() {
+      isLoading = false;
+    });
   }
 
   _trySubmit() {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
     if (isValid) {
-      findUser();
+      this.setState(() {
+        isLoading = true;
+      });
+      findUserUrl(context, _qrCodeUrl);
+      Future.delayed(const Duration(milliseconds: 1000), () {
+
+        setState(() {
+          isLoading = false;
+        });
+
+      });
     }
   }
 
-  findUser() async {
+  /*findUser(String qrCodeUrl) async {
     List<DocumentSnapshot> documentList;
     List<DocumentSnapshot> qrList;
-    print(_qrCodeUrl);
-    _qrCodeUrl = _qrCodeUrl.trim();
-    String username = _qrCodeUrl.substring(0, _qrCodeUrl.indexOf('/'));
+    print(qrCodeUrl);
+    qrCodeUrl = qrCodeUrl.trim();
+    String username = qrCodeUrl.substring(0, qrCodeUrl.indexOf('/'));
     print(username);
     this.setState(() {
       isLoading = true;
@@ -65,7 +79,7 @@ class _ScanFormState extends State<ScanForm> {
               .collection("users")
               .document(_userFoundId)
               .collection("QrCodes")
-              .where("url", isEqualTo: "tgns.to/$_qrCodeUrl")
+              .where("url", isEqualTo: "tgns.to/$qrCodeUrl")
               .getDocuments())
           .documents;
 
@@ -96,22 +110,7 @@ class _ScanFormState extends State<ScanForm> {
     }
     return null;
 
-    //TODO: Implement this to find a User
-/*    if (documentList.isEmpty) {
-      Fluttertoast.showToast(msg: "No user found with that username");
-      print("No user found");
-    } else {
-      print("User Found: " + documentList[0]["username"]);
-      this.setState(() {
-        isLoading = false;
-      });
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UserFoundScreen(documentList[0]),
-          ));
-    }*/
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +122,9 @@ class _ScanFormState extends State<ScanForm> {
             style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor),
+                color: Theme
+                    .of(context)
+                    .primaryColor),
           ),
           margin: EdgeInsets.only(left: 10.0, bottom: 5.0, top: 10.0),
         ),
@@ -142,7 +143,9 @@ class _ScanFormState extends State<ScanForm> {
                 key: _formKey,
                 child: Theme(
                   data: Theme.of(context)
-                      .copyWith(primaryColor: Theme.of(context).primaryColor),
+                      .copyWith(primaryColor: Theme
+                      .of(context)
+                      .primaryColor),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 60),
                     child: TextFormField(
@@ -158,8 +161,7 @@ class _ScanFormState extends State<ScanForm> {
                       ),
                       controller: qrCodeUrlController,
                       onChanged: (value) {
-                        //_qrCodeUrl = "tgns.to/$value";
-                        _qrCodeUrl = value;
+                        _qrCodeUrl = "tgns.to/$value";
                       },
                     ),
                   ),
@@ -171,19 +173,21 @@ class _ScanFormState extends State<ScanForm> {
         isLoading
             ? const Loading()
             : Container(
-                child: FlatButton(
-                  onPressed: _trySubmit,
-                  child: Text(
-                    "SEARCH",
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  color: Theme.of(context).primaryColor,
-                  splashColor: Colors.transparent,
-                  textColor: Colors.black,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                ),
-              ),
+          child: FlatButton(
+            onPressed: _trySubmit,
+            child: Text(
+              "SEARCH",
+              style: TextStyle(fontSize: 16.0),
+            ),
+            color: Theme
+                .of(context)
+                .primaryColor,
+            splashColor: Colors.transparent,
+            textColor: Colors.black,
+            padding:
+            EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+          ),
+        ),
       ],
     );
   }
