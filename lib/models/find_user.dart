@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -64,7 +65,7 @@ findUserUrl(BuildContext context, String _qrCodeUrl) async {
 
 }
 
-findUser(BuildContext context, String _qrCodeUrl, String _holderName) async{
+findUser(BuildContext context, String _qrCodeUrl, String _holderName, String userId) async{
   List<DocumentSnapshot> documentList;
   String _userFoundId;
   String _qrUsernameId;
@@ -89,13 +90,24 @@ findUser(BuildContext context, String _qrCodeUrl, String _holderName) async{
     return null;
   } else {
     _userFoundId = documentList[0]["id"];
+
+    Firestore.instance.collection("users").document(_userFoundId).updateData({
+    "hasChatWith" : FieldValue.arrayUnion(
+        ["$userId"]
+      ),
+    });
+    Firestore.instance.collection("users").document(userId).updateData({
+      "hasChatWith" : FieldValue.arrayUnion(
+          ["$_userFoundId"]
+      ),    });
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => Chat(
           chatId: _userFoundId,
           chatAvatar: documentList[0]["photoUrl"],
-          chatName: "${documentList[0]["displayName"]}: $_holderName",
+          chatName: "${documentList[0]["displayName"]}",
+          holderName: _holderName,
         ),
       ),
     );

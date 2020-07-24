@@ -13,6 +13,7 @@ exports.sendNotification = functions.firestore
     const fromId = doc.fromId
     const toId = doc.toId
     const contentMessage = doc.content
+    const holderName = doc.holderName
 
     // Get push token user to (receive)
     admin
@@ -45,6 +46,7 @@ exports.sendNotification = functions.firestore
                       click_action: "FLUTTER_NOTIFICATION_CLICK",
                       name: String(userFrom.data().username),
                       photo_url: String(userFrom.data().photoUrl),
+                      holderName: holderName,
                     }
                   }
                   // Let push to the target device

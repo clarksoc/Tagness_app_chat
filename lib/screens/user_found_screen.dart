@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagnessappchat/models/find_user.dart';
 import 'package:tagnessappchat/screens/scan_screen.dart';
 
@@ -17,13 +18,24 @@ class UserFoundScreen extends StatefulWidget {
 class _UserFoundScreenState extends State<UserFoundScreen> {
   _UserFoundScreenState({@required this.userData, @required this.qrData});
 
+  SharedPreferences sharedPreferences;
+
   DocumentSnapshot userData;
   DocumentSnapshot qrData;
+
+  String userId = "";
+
 
   @override
   void initState() {
     super.initState();
     //FocusScope.of(context).unfocus();
+    readLocal();
+  }
+
+  readLocal() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+    userId = sharedPreferences.getString("id") ?? "";
   }
 
   @override
@@ -217,9 +229,9 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
                     ),
                     Container(
                       child: FlatButton(
-                        onPressed: () => findUser(context, qrData["url"], qrData["holderName"]),
+                        onPressed: () => findUser(context, qrData["url"], qrData["holderName"], userId),
                         child: Text(
-                          "SEARCH",
+                          "START CHATTING",
                           style: TextStyle(fontSize: 16.0),
                         ),
                         color: Theme

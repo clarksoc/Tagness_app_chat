@@ -102,6 +102,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       _appBadgeSupported = appBadgeSupported;
     });
   }
+
   void readLocal() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
@@ -155,7 +156,8 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           .document(userId)
           .updateData({"pushToken": token});
     }).catchError((onError) {
-      Fluttertoast.showToast(msg: onError.message.toString(),
+      Fluttertoast.showToast(
+        msg: onError.message.toString(),
         backgroundColor: Colors.grey,
         textColor: Colors.black,
       );
@@ -248,6 +250,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                       chatId: message["data"]["id"],
                       chatName: message["data"]["name"],
                       chatAvatar: message["data"]["photo_url"],
+                      holderName: message["data"]["holderName"],
                     )),
           )
         : Navigator.push(
@@ -257,6 +260,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                       chatId: message["id"],
                       chatName: message["name"],
                       chatAvatar: message["photo_url"],
+                      holderName: message["holderName"],
                     )),
           );
     _removeBadge();

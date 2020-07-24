@@ -7,11 +7,12 @@ import 'chat.dart';
 int counter = 0;
 
 Widget buildItem(
-    BuildContext context, DocumentSnapshot documentSnapshot, currentUserId) {
+    BuildContext context, DocumentSnapshot documentSnapshot, currentUserId, int index) {
+
   if (documentSnapshot["id"] == currentUserId) {
     //will not display the current user as a chat option
     return Container();
-  } else {
+  }else{
     return Container(
       child: FlatButton(
         child: Row(

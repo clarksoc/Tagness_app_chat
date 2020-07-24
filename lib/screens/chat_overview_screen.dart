@@ -135,9 +135,10 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
                         ),
                       );
                     } else {
+                      //fireInstance.collection("users").where(field)
                       return ListView.builder(
                           itemBuilder: (context, index) => buildItem(context,//calls the build_item widget and passes in the current User
-                              snapshot.data.documents[index], userId),
+                              snapshot.data.documents[index], userId, index),
                           itemCount: snapshot.data.documents.length,
                         );
                     }

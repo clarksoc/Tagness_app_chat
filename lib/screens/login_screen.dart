@@ -68,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
           "firstName": null,
           "lastName": null,
           "email": firebaseUser.email,
+          "hasChatWith" : [""],
         });
         //Writing data to local device
         currentUser = firebaseUser;
@@ -86,7 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
         await preferences.setString("firstName", documents[0]["firstName"]);
         await preferences.setString("lastName", documents[0]["lastName"]);
       }
-      Fluttertoast.showToast(msg: "Sign in Successful",
+      Fluttertoast.showToast(
+        msg: "Sign in Successful",
         backgroundColor: Colors.grey,
         textColor: Colors.black,
       );
@@ -94,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoading = false;
       });
 
-      if(firstTime != null && !firstTime){
+      if (firstTime != null && !firstTime) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -103,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         );
-      }else{
+      } else {
         preferences.setBool('first_time', false);
         Navigator.push(
           context,
@@ -112,13 +114,9 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         );
       }
-
-
     }
     return null;
   }
-
-
 
   @override
   Widget build(BuildContext context) {

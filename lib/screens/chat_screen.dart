@@ -18,15 +18,16 @@ class ChatScreen extends StatefulWidget {
   //TODO: Dismiss notification if on this page
   final String chatId;
   final String chatAvatar;
+  final String holderName;
   final String payload;
 
   ChatScreen(
-      {Key key, @required this.chatId, @required this.chatAvatar, this.payload})
+      {Key key, @required this.chatId, @required this.chatAvatar, @required this.holderName, this.payload})
       : super(key: key);
 
   @override
   _ChatScreenState createState() =>
-      _ChatScreenState(chatId: chatId, chatAvatar: chatAvatar);
+      _ChatScreenState(chatId: chatId, chatAvatar: chatAvatar, holderName: holderName);
 }
 
 class _ChatScreenState extends State<ChatScreen> {
@@ -38,8 +39,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   String chatId;
   String chatAvatar;
+  String holderName;
 
-  _ChatScreenState({Key key, @required this.chatId, @required this.chatAvatar});
+  _ChatScreenState({Key key, @required this.chatId, @required this.chatAvatar, @required this.holderName});
 
   String userId;
 
@@ -77,9 +79,9 @@ class _ChatScreenState extends State<ChatScreen> {
     //groupChatId = uuid.v4();
     print(groupChatId);
     if (userId.hashCode <= chatId.hashCode) {
-      groupChatId = "$userId-$chatId";
+      groupChatId = "$userId-$chatId-$holderName";
     } else {
-      groupChatId = "$chatId-$userId";
+      groupChatId = "$chatId-$userId-$holderName";
     }
 
     fireStoreInstance
@@ -143,6 +145,7 @@ class _ChatScreenState extends State<ChatScreen> {
           {
             "fromId": userId,
             "toId": chatId,
+            "holderName": holderName,
             "timestamp": Timestamp.now(),
             "content": _enteredMessage,
             "type": messageType,
@@ -150,8 +153,8 @@ class _ChatScreenState extends State<ChatScreen> {
         );
         textEditingController.clear();
       });
-      scrollController.animateTo(0.0,
-          duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+/*      scrollController.animateTo(0.0,
+          duration: Duration(milliseconds: 300), curve: Curves.easeOut);*/
     } else {
       Fluttertoast.showToast(msg: "Message is empty",
         backgroundColor: Colors.grey,

@@ -6,8 +6,9 @@ class Chat extends StatelessWidget {
   final String chatId;
   final String chatName;
   final String chatAvatar;
+  final String holderName;
 
-  Chat({Key key, @required this.chatId, @required this.chatAvatar, @required this.chatName})
+  Chat({Key key, @required this.chatId, @required this.chatAvatar, @required this.chatName, @required this.holderName})
       : super(key: key);
 
   @override
@@ -15,7 +16,7 @@ class Chat extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "$chatName",
+          "$chatName: $holderName",
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold),
@@ -26,6 +27,7 @@ class Chat extends StatelessWidget {
       body: ChatScreen(
         chatId: chatId,
         chatAvatar: chatAvatar,
+        holderName: holderName,
       ),
     );
   }
