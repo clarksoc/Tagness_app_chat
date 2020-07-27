@@ -63,12 +63,13 @@ class _LoginScreenState extends State<LoginScreen> {
           "displayName": firebaseUser.displayName,
           "photoUrl": firebaseUser.photoUrl,
           "id": firebaseUser.uid,
-          "createdAt": Timestamp.now().toString(),
+          "createdAt": DateTime.now().toString(),
           "phoneNumber": firebaseUser.phoneNumber,
           "firstName": null,
           "lastName": null,
           "email": firebaseUser.email,
-          "hasChatWith" : [""],
+          "hasChatWith" : [],
+          "chatWithHolderName" : [],
         });
         //Writing data to local device
         currentUser = firebaseUser;

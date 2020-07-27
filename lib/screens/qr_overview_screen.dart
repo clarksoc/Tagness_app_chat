@@ -93,42 +93,4 @@ class _QrOverviewScreenState extends State<QrOverviewScreen> {
       //onWillPop: onBackPress,
     );
   }
-
-/*  Widget buildQrCodes() {
-    return Flexible(
-      child: FutureBuilder(
-        future: FirebaseAuth.instance.currentUser(),
-        builder: (ctx, futureSnapshot) {
-          if (futureSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return StreamBuilder(
-            stream: fireStoreInstance.collection("QRCodes").document(qrCodeId)
-                .collection(qrCodeId).orderBy("url", descending: true)
-                .snapshots(),
-            builder: (context, qrSnapshot){
-              if (qrSnapshot.connectionState ==
-                  ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else{
-                return ListView.builder(itemBuilder: (context, index) => buildItemQr(
-                  context,
-                  index,
-                  qrSnapshot.data.documents[index],
-                  userId,
-                  widget.dataString,
-                  widget.qrData,
-
-                ));
-              }
-            },
-          );
-        },
-      ),
-    );
-  }*/
 }

@@ -125,8 +125,9 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
         body: Stack(
             children: <Widget>[
               Container(
-                child: StreamBuilder(
-                  stream: fireInstance.collection("users").snapshots(),
+                child: StreamBuilder(//TODO: Implement this
+                  //stream: fireInstance.collection("users").where("hasChatWith", arrayContains: userId).snapshots(),
+                  stream: fireInstance.collection("users").document(userId).collection("hasChatWith").snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Center(
