@@ -38,6 +38,9 @@ class _QrScreenState extends State<QrScreen> {
   @override
   Widget build(BuildContext context) {
     var _dataQr = widget.dataQr;
+    /*final bodyHeight = MediaQuery.of(context).size.height -
+        MediaQuery.of(context).viewInsets.bottom;*/
+    //String _dataString = widget.dataString.toString();
     print(_dataQr["url"]);
     return WillPopScope(
       child: Scaffold(

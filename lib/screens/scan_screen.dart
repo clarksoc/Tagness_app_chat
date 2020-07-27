@@ -4,8 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:tagnessappchat/models/find_user.dart';
 import 'package:tagnessappchat/screens/main_screen.dart';
 import 'package:tagnessappchat/widgets/scan_form.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-
+import '../widgets/scan_form.dart' as scanForm;
 
 class ScanScreen extends StatefulWidget {
   @override
@@ -28,9 +27,7 @@ class _ScanScreenState extends State<ScanScreen> {
           "QR Code Finder",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Theme
-            .of(context)
-            .accentColor,
+        backgroundColor: Theme.of(context).accentColor,
         centerTitle: true,
       ),
       body: WillPopScope(
@@ -57,10 +54,7 @@ class _ScanScreenState extends State<ScanScreen> {
                     color: Colors.cyan,
                     textColor: Colors.black,
                     splashColor: Colors.blueGrey,
-                    onPressed: () {
-                      Crashlytics.instance.crash();
-                      //startScan;
-                    },
+                    onPressed: startScan,
                     child: const Text("START CAMERA SCAN"),
                   ),
                 ),
@@ -98,7 +92,7 @@ class _ScanScreenState extends State<ScanScreen> {
     } on FormatException {
       setState(() {
         this.qrCode =
-        "Null (User returned using the \"Back\"-button before scanning could complete.) Result";
+            "Null (User returned using the \"Back\"-button before scanning could complete.) Result";
       });
     } catch (e) {
       setState(() {

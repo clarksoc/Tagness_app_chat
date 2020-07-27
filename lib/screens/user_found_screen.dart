@@ -24,8 +24,6 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
   DocumentSnapshot qrData;
 
   String userId = "";
-  String userDisplayName = "";
-  String userPhotoUrl = "";
 
 
   @override
@@ -38,8 +36,6 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
   readLocal() async{
     sharedPreferences = await SharedPreferences.getInstance();
     userId = sharedPreferences.getString("id") ?? "";
-    userDisplayName = sharedPreferences.getString("displayName") ?? "";
-    userPhotoUrl = sharedPreferences.getString("photoUrl") ?? "";
   }
 
   @override
@@ -233,7 +229,7 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
                     ),
                     Container(
                       child: FlatButton(
-                        onPressed: () => findUser(context, qrData["url"], qrData["holderName"], userId, userDisplayName, userPhotoUrl),
+                        onPressed: () => findUser(context, qrData["url"], qrData["holderName"], userId),
                         child: Text(
                           "START CHATTING",
                           style: TextStyle(fontSize: 16.0),

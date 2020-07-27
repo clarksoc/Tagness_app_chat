@@ -8,9 +8,7 @@ int counter = 0;
 
 Widget buildItem(
     BuildContext context, DocumentSnapshot documentSnapshot, currentUserId, int index) {
-  String holderName;
-  holderName = documentSnapshot["holderName"].toString();
-  print(documentSnapshot.documentID);
+
   if (documentSnapshot["id"] == currentUserId) {
     //will not display the current user as a chat option
     return Container();
@@ -20,7 +18,7 @@ Widget buildItem(
         child: Row(
           children: <Widget>[
             Material(
-              child: documentSnapshot["chatAvatar"] != null
+              child: documentSnapshot["photoUrl"] != null
                   ? CachedNetworkImage(
                       placeholder: (context, photoUrl) => Container(
                         width: 50,
@@ -31,7 +29,7 @@ Widget buildItem(
                           valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
                         ),
                       ),
-                      imageUrl: documentSnapshot["chatAvatar"],
+                      imageUrl: documentSnapshot["photoUrl"],
                       width: 50.0,
                       height: 50.0,
                       fit: BoxFit.cover,
@@ -49,17 +47,7 @@ Widget buildItem(
             Flexible(
               child: Container(
                 child: Text(
-                  "${documentSnapshot["chatName"]}",
-                  style: TextStyle(color: Colors.black),
-                ),
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(left: 10, right: 5.0),
-              ),
-            ),
-            Flexible(
-              child: Container(
-                child: Text(
-                  "${documentSnapshot["holderName"]}",
+                  "${documentSnapshot["displayName"]}",
                   style: TextStyle(color: Colors.black),
                 ),
                 alignment: Alignment.centerLeft,
@@ -73,10 +61,9 @@ Widget buildItem(
             context,
             MaterialPageRoute(
               builder: (context) => Chat(
-                chatId: documentSnapshot["chatId"],
-                chatAvatar: documentSnapshot["chatAvatar"],
-                chatName: documentSnapshot["chatName"],
-                holderName: holderName,
+                chatId: documentSnapshot.documentID,
+                chatAvatar: documentSnapshot["photoUrl"],
+                chatName: documentSnapshot["displayName"],
               ),
             ),
           );
