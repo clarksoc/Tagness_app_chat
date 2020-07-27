@@ -29,7 +29,7 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
 
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin();
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   SharedPreferences sharedPreferences;
@@ -84,7 +84,7 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
 
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (ctx) => LoginScreen(title: "Tagness",)),
-        (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
   }
 
   int counter = 0;
@@ -123,31 +123,32 @@ class _ChatOverviewScreenState extends State<ChatOverviewScreen> {
           ],
         ),
         body: Stack(
-            children: <Widget>[
-              Container(
-                child: StreamBuilder(
-                  stream: fireInstance.collection("users").snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                        ),
-                      );
-                    } else {
-                      //fireInstance.collection("users").where(field)
-                      return ListView.builder(
-                          itemBuilder: (context, index) => buildItem(context,//calls the build_item widget and passes in the current User
-                              snapshot.data.documents[index], userId, index),
-                          itemCount: snapshot.data.documents.length,
-                        );
-                    }
-                  },
-                ),
+          children: <Widget>[
+            Container(
+              child: StreamBuilder(//TODO: Implement this
+                //stream: fireInstance.collection("users").where("hasChatWith", arrayContains: userId).snapshots(),
+                stream: fireInstance.collection("users").document(userId).collection("hasChatWith").snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                      ),
+                    );
+                  } else {
+                    //fireInstance.collection("users").where(field)
+                    return ListView.builder(
+                      itemBuilder: (context, index) => buildItem(context,//calls the build_item widget and passes in the current User
+                          snapshot.data.documents[index], userId, index),
+                      itemCount: snapshot.data.documents.length,
+                    );
+                  }
+                },
               ),
-              Positioned(child: isLoading? const Loading() : Container())//Displays loading circle if loading users in the database or an empty container if there are no more
-            ],
-          ),
+            ),
+            Positioned(child: isLoading? const Loading() : Container())//Displays loading circle if loading users in the database or an empty container if there are no more
+          ],
+        ),
       ),
       onWillPop: onBackPress,
     );
