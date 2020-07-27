@@ -32,6 +32,9 @@ class _QrScreenState extends State<QrScreen> {
   }
 
 
+
+
+
   @override
   Widget build(BuildContext context) {
     var _dataQr = widget.dataQr;

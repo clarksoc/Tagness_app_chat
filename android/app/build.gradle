@@ -42,7 +42,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.connor.tagnessappchat"
-        minSdkVersion 18
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -67,13 +67,13 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation "me.leolin:ShortcutBadger:1.1.22@aar"
     implementation 'com.google.firebase:firebase-analytics:17.4.4'
-/*    implementation ('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true;
-    }*/
+    }
     //implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
 
 }
 //apply plugin: 'com.google.firebase.crashlytics'
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 

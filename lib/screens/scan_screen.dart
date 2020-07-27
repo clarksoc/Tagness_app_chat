@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:tagnessappchat/models/find_user.dart';
 import 'package:tagnessappchat/screens/main_screen.dart';
 import 'package:tagnessappchat/widgets/scan_form.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 
 class ScanScreen extends StatefulWidget {
@@ -57,8 +58,8 @@ class _ScanScreenState extends State<ScanScreen> {
                     textColor: Colors.black,
                     splashColor: Colors.blueGrey,
                     onPressed: () {
-                      //Crashlytics.instance.crash();
-                      startScan();
+                      Crashlytics.instance.crash();
+                      //startScan;
                     },
                     child: const Text("START CAMERA SCAN"),
                   ),
