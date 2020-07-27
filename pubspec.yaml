@@ -42,7 +42,7 @@ dependencies:
   flutter_app_badger: ^1.1.2
   splashscreen: ^1.2.0
   random_string: ^2.1.0
-  firebase_crashlytics: ^0.1.4+1
+#  firebase_crashlytics: ^0.1.4+1
 
 
 
