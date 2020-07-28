@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:tagnessappchat/models/find_user.dart';
 import 'package:tagnessappchat/screens/main_screen.dart';
 import 'package:tagnessappchat/widgets/scan_form.dart';
-import '../widgets/scan_form.dart' as scanForm;
 
 class ScanScreen extends StatefulWidget {
   @override

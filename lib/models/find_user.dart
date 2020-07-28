@@ -14,12 +14,12 @@ findUserUrl(BuildContext context, String _qrCodeUrl) async {
   _qrUsernameId = _qrCodeUrl.substring(_qrCodeUrl.indexOf("/") + 1);
   print("Username/Id: " + _qrUsernameId);
   String _foundUsername =
-  _qrUsernameId.substring(0, _qrUsernameId.indexOf('/'));
+      _qrUsernameId.substring(0, _qrUsernameId.indexOf('/'));
   print("Username: " + _foundUsername);
   documentList = (await Firestore.instance
-      .collection("users")
-      .where("username", isEqualTo: _foundUsername)
-      .getDocuments())
+          .collection("users")
+          .where("username", isEqualTo: _foundUsername)
+          .getDocuments())
       .documents;
   if (documentList.isEmpty) {
     Fluttertoast.showToast(
@@ -33,11 +33,11 @@ findUserUrl(BuildContext context, String _qrCodeUrl) async {
     _userFoundId = documentList[0]["id"];
 
     qrList = (await Firestore.instance
-        .collection("users")
-        .document(_userFoundId)
-        .collection("QrCodes")
-        .where("url", isEqualTo: _qrCodeUrl)
-        .getDocuments())
+            .collection("users")
+            .document(_userFoundId)
+            .collection("QrCodes")
+            .where("url", isEqualTo: _qrCodeUrl)
+            .getDocuments())
         .documents;
 
     if (qrList.isEmpty) {
@@ -74,12 +74,12 @@ findUser(BuildContext context, String _qrCodeUrl, String _holderName,
   _qrUsernameId = _qrCodeUrl.substring(_qrCodeUrl.indexOf("/") + 1);
   print("Username/Id: " + _qrUsernameId);
   String _foundUsername =
-  _qrUsernameId.substring(0, _qrUsernameId.indexOf('/'));
+      _qrUsernameId.substring(0, _qrUsernameId.indexOf('/'));
   print("Username: " + _foundUsername);
   documentList = (await Firestore.instance
-      .collection("users")
-      .where("username", isEqualTo: _foundUsername)
-      .getDocuments())
+          .collection("users")
+          .where("username", isEqualTo: _foundUsername)
+          .getDocuments())
       .documents;
   if (documentList.isEmpty) {
     Fluttertoast.showToast(
@@ -89,29 +89,11 @@ findUser(BuildContext context, String _qrCodeUrl, String _holderName,
     );
     print("No user found");
     return null;
-  }else {
-    _userFoundId = documentList[0]["id"];
-/*    var doesHolderNameExist = await Firestore.instance
-        .collection("users")
-        .where("chatWithHolder", arrayContains: _holderName)
-        .getDocuments();
-    var doesUserExist = await Firestore.instance
-        .collection("users")
-        .where("hasChatWith", arrayContains: userId)
-        .getDocuments();
-    if(doesUserExist.documents.isEmpty != true){
-      Firestore.instance.collection("users").document(_userFoundId).updateData({
-        "hasChatWith": FieldValue.arrayUnion([userId]),
-        //"chatWithHolderName": FieldValue.arrayUnion([_holderName]),
-      });
-      Firestore.instance.collection("users").document(userId).updateData({
-        "hasChatWith": FieldValue.arrayUnion([_userFoundId]),
-        //"chatWithHolderName": FieldValue.arrayUnion([_holderName]),
-        //"hasChatWith" : _userFoundId: FieldValue.arrayUnion([_holderName]),
-      });
-    }else{
+  } else {
+    //TODO: is userId == userFoundID: Display weird Error
 
-    }*/
+
+    _userFoundId = documentList[0]["id"];
     Firestore.instance
         .collection("users")
         .document(userId)
@@ -122,7 +104,7 @@ findUser(BuildContext context, String _qrCodeUrl, String _holderName,
         "chatName": documentList[0]["displayName"],
         "holderName": _holderName,
         "chatAvatar": documentList[0]["photoUrl"],
-        "chatId" : _userFoundId,
+        "chatId": _userFoundId,
       },
     );
     Firestore.instance
@@ -135,22 +117,9 @@ findUser(BuildContext context, String _qrCodeUrl, String _holderName,
         "chatName": userDisplayName,
         "holderName": _holderName,
         "chatAvatar": userPhotoUrl,
-        "chatId" : userId,
-
+        "chatId": userId,
       },
     );
-    Firestore.instance.collection("users").document(_userFoundId).updateData({
-      "hasChatWith": FieldValue.arrayUnion([userId]),
-      "chatWithHolderName": FieldValue.arrayUnion([_holderName]),
-    });
-    Firestore.instance.collection("users").document(userId).updateData({
-      "hasChatWith": FieldValue.arrayUnion([_userFoundId]),
-      "chatWithHolderName": FieldValue.arrayUnion([_holderName]),
-      //"hasChatWith" : _userFoundId: FieldValue.arrayUnion([_holderName]),
-    });
-    //TODO: is userId == userFoundID: Display weird Error
-    /*var arrayUserId = [userId, _holderName];
-    var arrayUserFoundId = [_userFoundId, _holderName];*/
 
     Navigator.push(
       context,
@@ -166,19 +135,3 @@ findUser(BuildContext context, String _qrCodeUrl, String _holderName,
     print(_userFoundId);
   }
 }
-
-/*    //TODO: Implement this to find a User
-     if (documentList.isEmpty) {
-      Fluttertoast.showToast(msg: "No user found with that username");
-      print("No user found");
-    } else {
-      print("User Found: " + documentList[0]["username"]);
-      this.setState(() {
-        isLoading = false;
-      });
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UserFoundScreen(documentList[0]),
-          ));
-    } */

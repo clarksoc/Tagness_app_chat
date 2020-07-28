@@ -28,6 +28,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   FirebaseUser currentUser;
 
+  Future<void> _handleSignIn() async{
+    try {
+      await googleSignInHandler();
+    } catch (error) {
+      print(error);
+    }
+  }
+
   Future<Null> googleSignInHandler() async {
     preferences = await SharedPreferences.getInstance();
     bool firstTime = preferences.getBool('first_time');
@@ -37,14 +45,21 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    if(googleSignInAccount == null){
+      setState(() {
+        isLoading = false;
+      });
+      print("USER CANCELLED SIGN IN");
+      return null;
+    }
+
     GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    AuthCredential credential = GoogleAuthProvider.getCredential(
       idToken: googleSignInAuthentication.idToken,
       accessToken: googleSignInAuthentication.accessToken,
     );
-
     FirebaseUser firebaseUser =
         (await firebaseAuth.signInWithCredential(credential)).user;
 
@@ -68,7 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
           "firstName": null,
           "lastName": null,
           "email": firebaseUser.email,
-          "hasChatWith" : [""],
         });
         //Writing data to local device
         currentUser = firebaseUser;
@@ -115,6 +129,10 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     }
+    print("is this called?");
+    setState(() {
+      isLoading = false;
+    });
     return null;
   }
 
@@ -136,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           Center(
             child: FlatButton(
-              onPressed: googleSignInHandler,
+              onPressed: _handleSignIn,
               child: Text(
                 "SIGN IN WITH GOOGLE",
                 style: TextStyle(fontSize: 16),
