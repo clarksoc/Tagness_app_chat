@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagnessappchat/screens/user_found_screen.dart';
 import '../models/find_user.dart';
 
@@ -19,6 +20,9 @@ class _ScanFormState extends State<ScanForm> with RouteAware {
   String _qrCodeUrl;
   String _qrCodeUsername;
   String _qrCodeId;
+  String userId;
+
+  SharedPreferences sharedPreferences;
 
   TextEditingController qrCodeUsernameController;
   TextEditingController qrCodeIdController;
@@ -26,10 +30,18 @@ class _ScanFormState extends State<ScanForm> with RouteAware {
   @override
   void initState() {
     super.initState();
+    readLocal();
     this.setState(() {
       isLoading = false;
     });
   }
+  readLocal() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    userId = sharedPreferences.getString("id") ?? "";
+
+  }
+
 
   _trySubmit() {
     final isValid = _formKey.currentState.validate();
@@ -39,7 +51,7 @@ class _ScanFormState extends State<ScanForm> with RouteAware {
       this.setState(() {
         isLoading = true;
       });
-      findUserUrl(context, _qrCodeUrl);
+      findUserUrl(context, _qrCodeUrl, userId);
       Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
           isLoading = false;

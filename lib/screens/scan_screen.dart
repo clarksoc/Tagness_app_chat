@@ -1,6 +1,7 @@
 import 'package:barcode_scan/platform_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagnessappchat/models/find_user.dart';
 import 'package:tagnessappchat/screens/main_screen.dart';
 import 'package:tagnessappchat/widgets/scan_form.dart';
@@ -13,9 +14,21 @@ class ScanScreen extends StatefulWidget {
 class _ScanScreenState extends State<ScanScreen> {
   String qrCode = "";
 
+  String userId;
+
+  SharedPreferences sharedPreferences;
+
   @override
   void initState() {
     super.initState();
+    readLocal();
+  }
+
+  readLocal() async{
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    userId = sharedPreferences.getString("id") ?? "";
+
   }
 
   @override
@@ -77,7 +90,7 @@ class _ScanScreenState extends State<ScanScreen> {
       setState(() {
         this.qrCode = qrCode.rawContent;
       });
-      findUserUrl(this.context, this.qrCode);
+      findUserUrl(this.context, this.qrCode, userId);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.cameraAccessDenied) {
         setState(() {

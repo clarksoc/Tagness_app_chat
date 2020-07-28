@@ -4,11 +4,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tagnessappchat/screens/user_found_screen.dart';
 import 'package:tagnessappchat/widgets/chat.dart';
 
-findUserUrl(BuildContext context, String _qrCodeUrl) async {
+findUserUrl(BuildContext context, String _qrCodeUrl, String userId) async {
   List<DocumentSnapshot> documentList;
   List<DocumentSnapshot> qrList;
   String _userFoundId;
   String _qrUsernameId;
+  bool isUser = false;
+
   print("URL: " + _qrCodeUrl);
   _qrCodeUrl = _qrCodeUrl.trim();
   _qrUsernameId = _qrCodeUrl.substring(_qrCodeUrl.indexOf("/") + 1);
@@ -54,10 +56,13 @@ findUserUrl(BuildContext context, String _qrCodeUrl) async {
         backgroundColor: Colors.grey[200],
         textColor: Colors.black,
       );
+      if(userId == _userFoundId){//Searching their own QR code
+          isUser = true;
+      }
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => UserFoundScreen(documentList[0], qrList[0]),
+            builder: (context) => UserFoundScreen(documentList[0], qrList[0], isUser),
           ));
     }
   }

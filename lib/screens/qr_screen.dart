@@ -70,7 +70,6 @@ class _QrScreenState extends State<QrScreen> {
                     /*embeddedImage: AssetImage("images/flutter_logo.png"),
                     embeddedImageStyle: QrEmbeddedImageStyle(
                         size: Size(100, 100)),*/
-                    //size: 0.5 * bodyHeight,
                   ),
                 ),
             ),

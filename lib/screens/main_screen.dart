@@ -303,7 +303,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   }
 
   Future<bool> onBackPress() {
-    OpenDialog(context);
+    openDialog(context);
     return Future.value(false);
   }
 
