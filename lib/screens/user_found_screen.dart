@@ -260,6 +260,9 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
                               children: <Widget>[
                                 RaisedButton(
                                   child: Text("MODIFY"),
+                                  onPressed: (){
+                                    
+                                  },
                                 ),
                                 RaisedButton(
                                   child: Text("DELETE"),
@@ -287,20 +290,8 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
     return Future.value(false);
   }
 
-  Future<bool> onDeletePress(){
+  Future<bool> onDeletePress() {
     openDialogDelete(context, userId, qrData["url"]);
     return Future.value(false);
   }
-
-/*  Future deleteQrCode(context) async {
-      var doc = Firestore.instance
-          .collection("users")
-          .document(userId)
-          .collection("QrCodes")
-          .where("url", isEqualTo: qrData["url"]);
-      return doc
-          .getDocuments()
-          .then((value) => value.documents.first.reference.delete());
-
-  }*/
 }

@@ -9,6 +9,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String _userDisplayName;
+  String _userUsername;
   String _userEmail;
   String _userPhoneNumber;
   String _userFirstName;
@@ -27,6 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     sharedPreferences = await SharedPreferences.getInstance();
 
     _userDisplayName = sharedPreferences.getString("displayName") ?? "";
+    _userUsername = sharedPreferences.getString("username") ?? "";
     _userEmail = sharedPreferences.getString("email") ?? "";
     _userPhoneNumber = sharedPreferences.getString("phoneNumber") ?? "";
     _userFirstName = sharedPreferences.getString("firstName") ?? "";
@@ -51,6 +53,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: <Widget>[
                         Text(
                           "Username:",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                        Text(
+                          "$_userUsername",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
+                    margin: EdgeInsets.only(left: 10.0, bottom: 25, top: 10.0),
+                  ),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "Display Name:",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 30,
