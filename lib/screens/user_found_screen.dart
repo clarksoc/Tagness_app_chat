@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:imei_plugin/imei_plugin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagnessappchat/models/find_user.dart';
+
 import 'package:tagnessappchat/screens/modify_qr_screen.dart';
-import 'package:tagnessappchat/screens/scan_screen.dart';
 import 'package:tagnessappchat/widgets/open_dialog_delete.dart';
 
 class UserFoundScreen extends StatefulWidget {
@@ -23,6 +26,8 @@ class UserFoundScreen extends StatefulWidget {
 class _UserFoundScreenState extends State<UserFoundScreen> {
   _UserFoundScreenState({@required this.userData, @required this.qrData});
 
+  FirebaseAnalytics analytics = FirebaseAnalytics();
+
   SharedPreferences sharedPreferences;
 
   DocumentSnapshot userData;
@@ -31,6 +36,7 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
   String userId = "";
   String userDisplayName = "";
   String userPhotoUrl = "";
+  List<String> imei;
 
   @override
   void initState() {
@@ -44,7 +50,42 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
     userId = sharedPreferences.getString("id") ?? "";
     userDisplayName = sharedPreferences.getString("displayName") ?? "";
     userPhotoUrl = sharedPreferences.getString("photoUrl") ?? "";
+
+
+    imei = await ImeiPlugin.getImeiMulti();
+    print("IMEI: ${imei.toString()}");
+    GeolocationStatus geolocationStatus  = await Geolocator().checkGeolocationPermissionStatus();
+    print("$geolocationStatus");
+    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+    print("Coordinates: $position");
+    print("User ID: $userId");
+
+    setUserProperties(userId: userId);
+
+    logPosition(userId: userId, long: position.longitude.toString(), lat: position.latitude.toString());
+
   }
+
+/*
+  FirebaseAnalytics _analytics;
+*/
+
+  Future<void> setUserProperties({@required String userId}) async{
+    await analytics.setUserId(userId);
+  }
+
+  Future<void> logPosition({String userId, String lat, String long}) async {
+    await analytics.logEvent(
+      name: "qr_scanned",
+      parameters: {
+        "userId": userId,
+        "Latitude": lat,
+        "Longitude": long,
+      },
+    );
+    //setMessage('logEvent succeeded');
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -266,7 +307,7 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
                     widget.isUser == false
                         ? Container(
                             child: FlatButton(
-                              onPressed: () => findUser(
+                              onPressed: () => findUserChat(
                                   context,
                                   qrData["url"],
                                   qrData["holderName"],

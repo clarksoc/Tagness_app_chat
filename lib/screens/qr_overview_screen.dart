@@ -78,7 +78,6 @@ class _QrOverviewScreenState extends State<QrOverviewScreen> {
                             snapshot.data.documents[index], qrId),
                         itemCount: snapshot.data.documents.length,
                       );
-
                     }
                   },
                 ),

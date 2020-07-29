@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:tagnessappchat/screens/user_found_screen.dart';
 import 'package:tagnessappchat/widgets/chat.dart';
 
@@ -64,12 +65,14 @@ findUserUrl(BuildContext context, String _qrCodeUrl, String userId) async {
           MaterialPageRoute(
             builder: (context) => UserFoundScreen(documentList[0], qrList[0], isUser),
           ));
+
+
     }
   }
   return null;
 }
 
-findUser(BuildContext context, String _qrCodeUrl, String _holderName,
+findUserChat(BuildContext context, String _qrCodeUrl, String _holderName,
     String userId, String userDisplayName, String userPhotoUrl) async {
   List<DocumentSnapshot> documentList;
   String _userFoundId;
