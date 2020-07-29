@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => MainScreen(
-              currentUserId: firebaseUser.uid,
+              //currentUserId: firebaseUser.uid,
             ),
           ),
         );

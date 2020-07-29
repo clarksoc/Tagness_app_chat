@@ -22,9 +22,6 @@ import 'settings_screen.dart';
 import 'generate_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  final String currentUserId;
-
-  MainScreen({Key key, @required this.currentUserId});
 
   @override
   _MainScreenState createState() => _MainScreenState();

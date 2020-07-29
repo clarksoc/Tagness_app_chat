@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tagnessappchat/models/find_user.dart';
+import 'package:tagnessappchat/screens/modify_qr_screen.dart';
 import 'package:tagnessappchat/screens/scan_screen.dart';
 import 'package:tagnessappchat/widgets/open_dialog_delete.dart';
 
@@ -65,6 +66,34 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   children: <Widget>[
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Type of QR Code: ",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 15),
+                          ),
+                          Text(
+                            "${qrData["type"]}",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                        ],
+                      ),
+                      margin:
+                      EdgeInsets.only(left: 10.0, bottom: 10, top: 10.0),
+                    ),
                     Container(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,7 +290,12 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
                                 RaisedButton(
                                   child: Text("MODIFY"),
                                   onPressed: (){
-                                    
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ModifyQrScreen(qrData.data),
+                                        ),
+                                    );
                                   },
                                 ),
                                 RaisedButton(

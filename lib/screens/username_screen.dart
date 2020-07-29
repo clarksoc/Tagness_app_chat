@@ -61,7 +61,7 @@ class _UserNameScreenState extends State<UserNameScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => MainScreen(
-            currentUserId: userId,
+            //currentUserId: userId,
           ),
         ),
       );

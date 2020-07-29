@@ -50,7 +50,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
       seconds: 5,
       navigateAfterSeconds: isLogIn == true ?
       MainScreen(
-          currentUserId: preferences.getString("id")) : LoginScreen(title: "Tagness"),
+          /*currentUserId: preferences.getString("id")*/) : LoginScreen(title: "Tagness"),
       title: Text("Welcome to the Tagness App!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
       image: Image.asset("images/flutter_logo_with_text.png"),
       photoSize: 200,

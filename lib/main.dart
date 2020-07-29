@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tagnessappchat/screens/main_screen.dart';
+import 'package:tagnessappchat/screens/qr_overview_screen.dart';
 
 import 'screens/splash_screen.dart';
 
@@ -26,6 +28,11 @@ class MyApp extends StatelessWidget {
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      initialRoute: "/",
+      routes: {
+        "/MainScreen": (context) => MainScreen(),
+        "/QrOverview": (context) => QrOverviewScreen(),
+      },
       home: LaunchScreen(),
       debugShowCheckedModeBanner: false,
     );

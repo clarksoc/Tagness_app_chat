@@ -39,9 +39,6 @@ class _QrOverviewScreenState extends State<QrOverviewScreen> {
     sharedPreferences = await SharedPreferences.getInstance();
     userId = sharedPreferences.getString("id") ?? "";
     qrId = sharedPreferences.getString("url") ?? "";
-    //qrData = sharedPreferences.getString(key)
-    /*username = sharedPreferences.getString("username") ?? "";
-    qrCodeId = "www.tgns.to/$username/";*/
 
     setState(() {});
   }
@@ -90,45 +87,11 @@ class _QrOverviewScreenState extends State<QrOverviewScreen> {
             ],
         ),
       ),
-      //onWillPop: onBackPress,
+      onWillPop: onBackPress,
     );
   }
-
-/*  Widget buildQrCodes() {
-    return Flexible(
-      child: FutureBuilder(
-        future: FirebaseAuth.instance.currentUser(),
-        builder: (ctx, futureSnapshot) {
-          if (futureSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return StreamBuilder(
-            stream: fireStoreInstance.collection("QRCodes").document(qrCodeId)
-                .collection(qrCodeId).orderBy("url", descending: true)
-                .snapshots(),
-            builder: (context, qrSnapshot){
-              if (qrSnapshot.connectionState ==
-                  ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else{
-                return ListView.builder(itemBuilder: (context, index) => buildItemQr(
-                  context,
-                  index,
-                  qrSnapshot.data.documents[index],
-                  userId,
-                  widget.dataString,
-                  widget.qrData,
-
-                ));
-              }
-            },
-          );
-        },
-      ),
-    );
-  }*/
+  Future<bool> onBackPress() {
+    Navigator.of(context).popAndPushNamed("/MainScreen");
+    return Future.value(false);
+  }
 }
