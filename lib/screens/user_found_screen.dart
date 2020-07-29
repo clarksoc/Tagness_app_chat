@@ -51,41 +51,46 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
     userDisplayName = sharedPreferences.getString("displayName") ?? "";
     userPhotoUrl = sharedPreferences.getString("photoUrl") ?? "";
 
-
     imei = await ImeiPlugin.getImeiMulti();
     print("IMEI: ${imei.toString()}");
-    GeolocationStatus geolocationStatus  = await Geolocator().checkGeolocationPermissionStatus();
+    GeolocationStatus geolocationStatus =
+        await Geolocator().checkGeolocationPermissionStatus();
     print("$geolocationStatus");
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
     print("Coordinates: $position");
     print("User ID: $userId");
 
     setUserProperties(userId: userId);
 
-    logPosition(userId: userId, long: position.longitude.toString(), lat: position.latitude.toString());
-
+    logPosition(
+        userId: userId,
+        long: position.longitude.toString(),
+        lat: position.latitude.toString(),
+        imei: imei.toString());
   }
 
 /*
   FirebaseAnalytics _analytics;
 */
 
-  Future<void> setUserProperties({@required String userId}) async{
+  Future<void> setUserProperties({@required String userId}) async {
     await analytics.setUserId(userId);
   }
 
-  Future<void> logPosition({String userId, String lat, String long}) async {
+  Future<void> logPosition(
+      {String userId, String lat, String long, String imei}) async {
     await analytics.logEvent(
       name: "qr_scanned",
       parameters: {
         "userId": userId,
         "Latitude": lat,
         "Longitude": long,
+        "IMEI": imei,
       },
     );
     //setMessage('logEvent succeeded');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +138,7 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
                         ],
                       ),
                       margin:
-                      EdgeInsets.only(left: 10.0, bottom: 10, top: 10.0),
+                          EdgeInsets.only(left: 10.0, bottom: 10, top: 10.0),
                     ),
                     Container(
                       child: Column(
@@ -330,12 +335,13 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
                               children: <Widget>[
                                 RaisedButton(
                                   child: Text("MODIFY"),
-                                  onPressed: (){
+                                  onPressed: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => ModifyQrScreen(qrData.data),
-                                        ),
+                                        builder: (context) =>
+                                            ModifyQrScreen(qrData.data),
+                                      ),
                                     );
                                   },
                                 ),

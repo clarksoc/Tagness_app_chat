@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:tagnessappchat/screens/main_screen.dart';
 import 'package:tagnessappchat/screens/qr_overview_screen.dart';
@@ -5,6 +6,13 @@ import 'package:tagnessappchat/screens/qr_overview_screen.dart';
 import 'screens/splash_screen.dart';
 
 void main() {
+
+  //FIREBASE Crashlytics
+  Crashlytics.instance.enableInDevMode = true;
+  // Pass all uncaught errors from the framework to Crashlytics.
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+
   runApp(MyApp());
 }
 

@@ -23,9 +23,13 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.google.firebase.crashlytics'// Add the Firebase Crashlytics plugin.
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+
+    ndkVersion "21.3.6528147"
+
     compileSdkVersion 29
 
     sourceSets {
@@ -61,9 +65,13 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.firebase:firebase-analytics:17.4.4'
+    implementation 'com.android.support:multidex:2.0.1'
     implementation "me.leolin:ShortcutBadger:1.1.22@aar"
+    implementation 'com.google.firebase:firebase-crashlytics:17.1.1'     // Add the Firebase Crashlytics SDK.
 
 }
+/*
+apply plugin: 'io.fabric'
+*/
 apply plugin: 'com.google.gms.google-services'
