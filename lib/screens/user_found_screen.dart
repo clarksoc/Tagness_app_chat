@@ -62,7 +62,7 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
 
     setUserProperties(userId: userId);
 
-    logPosition(userId: userId, long: position.longitude.toString(), lat: position.latitude.toString(), imei: imei.toString());
+    logPosition(userId: userId, long: position.longitude.toString(), lat: position.latitude.toString());
 
   }
 
@@ -74,14 +74,13 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
     await analytics.setUserId(userId);
   }
 
-  Future<void> logPosition({String userId, String lat, String long, String imei}) async {
+  Future<void> logPosition({String userId, String lat, String long}) async {
     await analytics.logEvent(
       name: "qr_scanned",
       parameters: {
         "userId": userId,
         "Latitude": lat,
         "Longitude": long,
-        "IMEI": imei,
       },
     );
     //setMessage('logEvent succeeded');
