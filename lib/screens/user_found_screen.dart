@@ -36,7 +36,7 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
   String userId = "";
   String userDisplayName = "";
   String userPhotoUrl = "";
-  List<String> imei;
+  String imei;
 
   @override
   void initState() {
@@ -51,15 +51,16 @@ class _UserFoundScreenState extends State<UserFoundScreen> {
     userDisplayName = sharedPreferences.getString("displayName") ?? "";
     userPhotoUrl = sharedPreferences.getString("photoUrl") ?? "";
 
-    imei = await ImeiPlugin.getImeiMulti();
+    //imei = await ImeiPlugin.getImeiMulti();
+    imei = await ImeiPlugin.getImei();
     print("IMEI: ${imei.toString()}");
     GeolocationStatus geolocationStatus =
         await Geolocator().checkGeolocationPermissionStatus();
     print("$geolocationStatus");
+    print("User ID: $userId");
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
     print("Coordinates: $position");
-    print("User ID: $userId");
 
     setUserProperties(userId: userId);
 
